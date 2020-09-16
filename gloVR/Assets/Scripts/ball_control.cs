@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ball_control : MonoBehaviour
 {
+	// get hand_motion script (for catch_ball)
+	private hand_motion hand_Motion;
+
 	// hand
 	private GameObject hand;
 
@@ -27,12 +30,14 @@ public class ball_control : MonoBehaviour
 		// find Hand object
 		hand = GameObject.Find("Hand");
 
+		hand_Motion = hand.GetComponent<hand_motion>();
+
 		// put ball at start point
 		targetPos = new Vector3(0, 0.5f, -11f);
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
 
-		// reset variables
+		// initialization
 		speed = 0.5f;
 		distance = 1f;
 		range = 3;
@@ -83,8 +88,19 @@ public class ball_control : MonoBehaviour
 			// stop ball
 			targetPos = this.transform.position;
 
+			hand_Motion.catch_ball = true;
+
 			score = score + 10;
 			scoreText.text = string.Format("Score: {0}", score);
+		}
+
+		// fail ball
+		if (this.transform.position.z > 10f)
+		{
+			// put ball at start point
+			this.transform.position = new Vector3(0, 0.5f, -11f);
+			// stop ball
+			targetPos = this.transform.position;
 		}
 	}
 }

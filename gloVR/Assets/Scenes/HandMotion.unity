@@ -912,12 +912,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Animation
       value: 
-      objectReference: {fileID: 7400016, guid: 168ca3ccfe8938149a1dc4b13a48d337, type: 3}
+      objectReference: {fileID: 7400000, guid: c42b5522da71a3b41bf57370cc0b3075, type: 2}
     - target: {fileID: 111837049598751108, guid: fc6de20e71dafe642821039753b2bbd2,
         type: 3}
       propertyPath: m_Animations.Array.data[1]
       value: 
-      objectReference: {fileID: 7400016, guid: 168ca3ccfe8938149a1dc4b13a48d337, type: 3}
+      objectReference: {fileID: 7400000, guid: c42b5522da71a3b41bf57370cc0b3075, type: 2}
     - target: {fileID: 111837049598751108, guid: fc6de20e71dafe642821039753b2bbd2,
         type: 3}
       propertyPath: m_Animations.Array.data[2]
@@ -927,7 +927,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Animations.Array.data[0]
       value: 
-      objectReference: {fileID: 7400016, guid: 168ca3ccfe8938149a1dc4b13a48d337, type: 3}
+      objectReference: {fileID: 7400000, guid: c42b5522da71a3b41bf57370cc0b3075, type: 2}
     - target: {fileID: 111837049598751108, guid: fc6de20e71dafe642821039753b2bbd2,
         type: 3}
       propertyPath: m_Animations.Array.data[3]
@@ -1954,6 +1954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.5
   distance: 1
+  range: 0
   scoreText: {fileID: 1877305416}
 --- !u!1 &2096651247 stripped
 GameObject:
@@ -1973,6 +1974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f1842526bbcdd40a9a2bbc87bcf95a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  catch_ball: 0
 --- !u!114 &2096651251
 MonoBehaviour:
   m_ObjectHideFlags: 0

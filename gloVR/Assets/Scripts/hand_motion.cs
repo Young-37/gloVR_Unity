@@ -15,6 +15,8 @@ public class hand_motion : MonoBehaviour
 	// hand
 	private GameObject hand;
 
+	private float speed = 3f;
+
 	//finger
 	private GameObject finger_1;
 	private GameObject finger_2;
@@ -56,12 +58,18 @@ public class hand_motion : MonoBehaviour
 	private int ring_finger_flex;
 	private int pinky_flex;
 
+	// catch ball
+	public bool catch_ball;
+	private Animation anim;
+
 	// mouse click point
 	private Vector3 mouseWorldPosition;
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		anim = transform.GetComponent<Animation>();
+
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
 
@@ -129,6 +137,8 @@ public class hand_motion : MonoBehaviour
 		middle_finger_flex = 180;
 		ring_finger_flex = 180;
 		pinky_flex = 180;
+
+		catch_ball = false;
 
 		// set finger as release
 		thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
@@ -348,7 +358,6 @@ public class hand_motion : MonoBehaviour
 		// move hand
 		if (hand.transform.position != mouseWorldPosition)
 		{
-			float speed = 2f;
 			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
 		}
 
@@ -370,6 +379,18 @@ public class hand_motion : MonoBehaviour
 		{
 			float speed = 5f;
 			hand.transform.Rotate(new Vector3(0, 0, speed), Space.World);
+		}
+
+		// catch ball
+		if (catch_ball)
+		{
+			Debug.Log("Catch Ball!!!");
+			//foreach (AnimationState state in anim)
+			//{
+			//	state.speed = 0.5F;
+			//}
+			anim.Play("hold_ball");
+			catch_ball = false;
 		}
 	}
 
