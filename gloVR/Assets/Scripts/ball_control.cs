@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ball_control : MonoBehaviour
 {
@@ -10,6 +11,15 @@ public class ball_control : MonoBehaviour
 	// target vector
 	private Vector3 targetPos;
 	private Vector3 moveVector;
+
+	// about difficulty & game
+	public float speed;
+	public float distance;
+	public int range;
+	private int score;
+
+	// UI
+	public Text scoreText;
 
 	// Start is called before the first frame update
 	void Start()
@@ -21,6 +31,13 @@ public class ball_control : MonoBehaviour
 		targetPos = new Vector3(0, 0.5f, -11f);
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
+
+		// reset variables
+		speed = 0.5f;
+		distance = 1f;
+		range = 3;
+		score = 0;
+		scoreText.text = string.Format("Score: {0}", score);
 	}
 
     // Update is called once per frame
@@ -32,8 +49,8 @@ public class ball_control : MonoBehaviour
 			this.transform.position = new Vector3(0, 0.5f, -11f);
 
 			// set target point
-			float targetX = Random.Range(hand.transform.position.x - 1, hand.transform.position.x + 1);
-			float targetY = Random.Range(hand.transform.position.y - 1, hand.transform.position.y + 1) + 0.95f;
+			float targetX = Random.Range(hand.transform.position.x - range, hand.transform.position.x + range);
+			float targetY = Random.Range(hand.transform.position.y - range, hand.transform.position.y + range) + 0.95f;
 			if (targetY < 0.5f)
 			{
 				targetY = 0.5f;
@@ -48,7 +65,6 @@ public class ball_control : MonoBehaviour
 		
 		if (this.transform.position != targetPos)
 		{
-			float speed = 0.5f;
 			this.transform.Translate(moveVector * Time.deltaTime * speed, Space.World);
 			this.transform.Rotate(moveVector);
 
@@ -57,6 +73,18 @@ public class ball_control : MonoBehaviour
 			//	// put ball at start point
 			//	this.transform.position = new Vector3(0, 0.5f, -11f);
 			//}
+		}
+
+		// catch ball
+		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance)
+		{
+			// put ball at start point
+			this.transform.position = new Vector3(0, 0.5f, -11f);
+			// stop ball
+			targetPos = this.transform.position;
+
+			score = score + 10;
+			scoreText.text = string.Format("Score: {0}", score);
 		}
 	}
 }
