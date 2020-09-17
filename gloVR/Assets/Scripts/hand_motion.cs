@@ -15,7 +15,7 @@ public class hand_motion : MonoBehaviour
 	// hand
 	private GameObject hand;
 
-	private float speed = 3f;
+	private float speed = 5f;
 
 	//finger
 	private GameObject finger_1;
@@ -59,6 +59,7 @@ public class hand_motion : MonoBehaviour
 	private int pinky_flex;
 
 	// catch ball
+	private GameObject catch_ball_object;
 	public bool catch_ball;
 	private Animation anim;
 
@@ -68,7 +69,12 @@ public class hand_motion : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		anim = transform.GetComponent<Animation>();
+		// animation component
+		anim = this.GetComponent<Animation>();
+
+		// catch ball object
+		catch_ball_object = GameObject.Find("Catch_Ball");
+		//catch_ball_object.setActive(false);
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -343,43 +349,41 @@ public class hand_motion : MonoBehaviour
 		}
 
 		// when mouse button down
-		// if (Input.GetMouseButtonUp(0))
-		// {
-		// 	// change hand's world coordinate to screen coordinate (to get z(depth) value)
-		// 	Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
+		if (Input.GetMouseButtonUp(0))
+		{
+			// change hand's world coordinate to screen coordinate (to get z(depth) value)
+			Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
-		// 	// change mouse's screen coordinate to world coordinate
-		// 	mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
-		// 	print(Input.mousePosition.x);
-		// 	print(Input.mousePosition.y);
-		// 	mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+			// change mouse's screen coordinate to world coordinate
+			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+			print(Input.mousePosition.x);
+			print(Input.mousePosition.y);
+			mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+		}
 
-		// 	Debug.Log(mouseWorldPosition);
-		// }
-
-		// // move hand
-		// if (hand.transform.position != mouseWorldPosition)
-		// {
-		// 	hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
-		// }
+		// move hand
+		if (hand.transform.position != mouseWorldPosition)
+		{
+			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
+		}
 
 		// rotate hand
 		// Roll (x)
 		if (Input.GetKey(KeyCode.R))
 		{
-			float speed = 5f;
+			speed = 5f;
 			hand.transform.Rotate(new Vector3(speed, 0, 0), Space.World);
 		}
 		// Pitch (y)
 		if (Input.GetKey(KeyCode.P))
 		{
-			float speed = 5f;
+			speed = 5f;
 			hand.transform.Rotate(new Vector3(0, speed, 0), Space.World);
 		}
 		// Yaw (z)
 		if (Input.GetKey(KeyCode.Y))
 		{
-			float speed = 5f;
+			speed = 5f;
 			hand.transform.Rotate(new Vector3(0, 0, speed), Space.World);
 		}
 
@@ -387,10 +391,8 @@ public class hand_motion : MonoBehaviour
 		if (catch_ball)
 		{
 			Debug.Log("Catch Ball!!!");
-			//foreach (AnimationState state in anim)
-			//{
-			//	state.speed = 0.5F;
-			//}
+			//catch_ball_object.setActive(true);
+			catch_ball_object.transform.position = new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z);
 			anim.Play("hold_ball");
 			catch_ball = false;
 		}
