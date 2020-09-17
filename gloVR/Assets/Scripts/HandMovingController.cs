@@ -19,9 +19,15 @@ public class HandMovingController : MonoBehaviour
 
   private Vector3 mouseWorldPosition;
 
+  float beforeXPos = 0;
+  float beforeYPos = 0;
+
 	// 2. Initialize variables
   void Start () 
   {
+
+    print(Camera.main.aspect);
+
     port = 5065;
     jump = false;
 
@@ -80,39 +86,32 @@ public class HandMovingController : MonoBehaviour
 	// 5. Make the Player move
   public void MoveHand()
   {
-    // change hand's world coordinate to screen coordinate (to get z(depth) value)
+  
 		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 			
-			// change mouse's screen coordinate to world coordinate
-        int index1 = text.IndexOf(',');
-        int index2 = text.Length - index1 - 1;
-        String string_xpos = text.Substring(0,index1);
-        String string_ypos = text.Substring(index1+1,index2);
+    int index1 = text.IndexOf(',');
+    int index2 = text.Length - index1 - 1;
+    String string_xpos = text.Substring(0,index1);
+    String string_ypos = text.Substring(index1+1,index2);
 
-        //1. float xpos = float.Parse(string_xpos)
-        float xPos = float.Parse(string_xpos);
-        float yPos = float.Parse(string_ypos);
+    float xPos = float.Parse(string_xpos);
+    float yPos = float.Parse(string_ypos);
 
-        print(xPos);
-        print(yPos);
+    // print(xPos);
+    // print(yPos);
 
-        mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
 
-        Debug.Log(mouseWorldPosition);
+    if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeXPos - xPos) > 10) )
+    {
+      mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
 
-        //hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, 1f * Time.deltaTime);
+      Debug.Log(mouseWorldPosition);
+      hand.transform.position = new Vector3(mouseWorldPosition.x,mouseWorldPosition.y,mouseWorldPosition.z);
 
-        //Vector3 moveVector = mouseWorldPosition - hand.transform.position;
-        //hand.transform.position = mouseWorldPosition;
-        // offset = hand's world coordinate - mouse's world coordinate (vector from mouse to hand)
-        //Vector3 offset = hand.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScr_coor.z));
-
-		// move hand
-		if(hand.transform.position != mouseWorldPosition)
-		{
-			float speed = 2f;
-			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
-		}
+      beforeXPos = xPos;
+      beforeYPos = yPos;
+    }
+    
   }
 
 

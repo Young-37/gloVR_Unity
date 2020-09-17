@@ -343,23 +343,25 @@ public class hand_motion : MonoBehaviour
 		}
 
 		// when mouse button down
-		if (Input.GetMouseButtonUp(0))
-		{
-			// change hand's world coordinate to screen coordinate (to get z(depth) value)
-			Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
+		// if (Input.GetMouseButtonUp(0))
+		// {
+		// 	// change hand's world coordinate to screen coordinate (to get z(depth) value)
+		// 	Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
-			// change mouse's screen coordinate to world coordinate
-			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
-			mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+		// 	// change mouse's screen coordinate to world coordinate
+		// 	mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+		// 	print(Input.mousePosition.x);
+		// 	print(Input.mousePosition.y);
+		// 	mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
 
-			Debug.Log(mouseWorldPosition);
-		}
+		// 	Debug.Log(mouseWorldPosition);
+		// }
 
-		// move hand
-		if (hand.transform.position != mouseWorldPosition)
-		{
-			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
-		}
+		// // move hand
+		// if (hand.transform.position != mouseWorldPosition)
+		// {
+		// 	hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
+		// }
 
 		// rotate hand
 		// Roll (x)
