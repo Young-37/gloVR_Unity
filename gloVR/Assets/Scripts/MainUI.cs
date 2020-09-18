@@ -5,7 +5,8 @@ using UnityEngine;
 public enum BTNType{
     Start,
     Exit,
-    Setting
+    Setting,
+    ExitSetting
 }
 
 public class MainUI : MonoBehaviour
