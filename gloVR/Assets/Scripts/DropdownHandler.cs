@@ -8,28 +8,32 @@ public class DropdownHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var dropdown = transform.GetComponent<Dropdown>();
-        dropdown.options.Clear();
+        var dropdowns = transform.GetComponents<Dropdown>();
 
-        List<string> items = new List<string>();
-        items.Add("first");
-        items.Add("Second");
-        items.Add("Third");
+        foreach(var dropdown in dropdowns){
+            dropdown.options.Clear();
 
-        //Fill Dropdown with items
-        foreach(var item in items){
-            dropdown.options.Add(new Dropdown.OptionData() {text = item});
+            List<string> items = new List<string>();
+            items.Add("0단계");
+            items.Add("1단계");
+            items.Add("2단계");
+            items.Add("3단계");
+
+            //Fill Dropdown with items
+            foreach(var item in items){
+                dropdown.options.Add(new Dropdown.OptionData() {text = item});
+            }
+
+            DropdownItemSelected(dropdown);
+
+            dropdown.onValueChanged.AddListener(delegate {DropdownItemSelected(dropdown);});
         }
-
-        DropdownItemSelected(dropdown);
-
-        dropdown.onValueChanged.AddListener(delegate {DropdownItemSelected(dropdown);});
-        
     }
 
     void DropdownItemSelected(Dropdown drd){
         int index = drd.value;
         Debug.Log(drd.options[index].text);
+
     }
 
 }
