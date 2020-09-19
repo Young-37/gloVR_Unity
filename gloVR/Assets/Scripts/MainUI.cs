@@ -6,7 +6,8 @@ public enum BTNType{
     Start,
     Exit,
     Setting,
-    ExitSetting
+    ExitSetting,
+    Adopt
 }
 
 public class MainUI : MonoBehaviour

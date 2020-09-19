@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.IO.Ports;
+using UnityEngine.UI;
 
 public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -31,6 +33,11 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             CanvasGroupOff(MainGroup);
             break;
 
+            case BTNType.Adopt:
+            Debug.Log("Adopt");
+            SendArduino();
+            break;
+
             case BTNType.ExitSetting:
             Debug.Log("ExitSetting");
             CanvasGroupOff(OptionGroup);
@@ -40,7 +47,8 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             case BTNType.Exit:
             Application.Quit();
             Debug.Log("Exit!");
-            break;
+            break;            
+
         }
 
     }
@@ -63,5 +71,33 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         cg.alpha = 0;
         cg.interactable = false;
         cg.blocksRaycasts = false;
+    }
+
+    public void SendArduino(){
+        print("send complete");
+
+        var op = GameObject.Find("OptionGroup");
+        Dropdown[] dropdowns = op.GetComponentsInChildren<Dropdown>();
+        
+        string sendData = "s";
+
+        foreach(var dropdown in dropdowns){
+            print(dropdown.value);
+            sendData = sendData.Insert(sendData.Length,dropdown.value.ToString());
+        }
+
+        sendData = sendData.Insert(sendData.Length,"e");
+
+        print(sendData);
+
+        // SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
+        // sp.Open();
+        // sp.ReadTimeout = 1;
+
+        // string sendData = "123";
+
+        // sp.Write(senData);
+
+        // sp.Close();
     }
 }

@@ -8,7 +8,8 @@ public class DropdownHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var dropdowns = transform.GetComponents<Dropdown>();
+        
+        Dropdown[] dropdowns = GetComponentsInChildren<Dropdown>();
 
         foreach(var dropdown in dropdowns){
             dropdown.options.Clear();
@@ -33,7 +34,6 @@ public class DropdownHandler : MonoBehaviour
     void DropdownItemSelected(Dropdown drd){
         int index = drd.value;
         Debug.Log(drd.options[index].text);
-
     }
 
 }
