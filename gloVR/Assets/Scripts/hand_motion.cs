@@ -62,6 +62,7 @@ public class hand_motion : MonoBehaviour
 	private GameObject catch_ball_object;
 	public bool catch_ball;
 	private Animation anim;
+	private float timer;
 
 	// mouse click point
 	private Vector3 mouseWorldPosition;
@@ -74,7 +75,10 @@ public class hand_motion : MonoBehaviour
 
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
-		//catch_ball_object.setActive(false);
+		catch_ball_object.gameObject.SetActive(false);
+
+		// timer
+		timer = 0.0f;
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -390,11 +394,17 @@ public class hand_motion : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
-			Debug.Log("Catch Ball!!!");
-			//catch_ball_object.setActive(true);
-			catch_ball_object.transform.position = new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z);
+			catch_ball_object.transform.localPosition = new Vector3(0, -0.05f, -0.12f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
+			catch_ball_object.gameObject.SetActive(true);
 			anim.Play("hold_ball");
-			catch_ball = false;
+			timer += Time.deltaTime;
+			if (timer > 1.0f)
+			{
+				catch_ball = false;
+				catch_ball_object.gameObject.SetActive(false);
+				timer = 0.0f;
+			}
+			//catch_ball_object.gameObject.SetActive(false);
 		}
 	}
 

@@ -54,8 +54,8 @@ public class ball_control : MonoBehaviour
 			this.transform.position = new Vector3(0, 0.5f, -11f);
 
 			// set target point
-			float targetX = Random.Range(hand.transform.position.x - range, hand.transform.position.x + range);
-			float targetY = Random.Range(hand.transform.position.y - range, hand.transform.position.y + range) + 0.95f;
+			float targetX = Random.Range(0 - range, 0 + range);
+			float targetY = Random.Range(0.5f - range, 0.5f + range) + 0.95f;
 			if (targetY < 0.5f)
 			{
 				targetY = 0.5f;
