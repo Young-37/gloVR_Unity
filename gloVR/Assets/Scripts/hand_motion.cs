@@ -362,7 +362,8 @@ public class hand_motion : MonoBehaviour
 			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
 			print(Input.mousePosition.x);
 			print(Input.mousePosition.y);
-			mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+			//mouseWorldPosition.y = mouseWorldPosition.y;
 		}
 
 		// move hand
