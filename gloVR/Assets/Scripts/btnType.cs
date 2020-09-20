@@ -74,7 +74,10 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     public void SendArduino(){
-        print("send complete");
+
+        SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
+        sp.Open();
+        sp.ReadTimeout = 1;
 
         var op = GameObject.Find("OptionGroup");
         Dropdown[] dropdowns = op.GetComponentsInChildren<Dropdown>();
@@ -87,17 +90,9 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         sendData = sendData.Insert(sendData.Length,"e");
-
         print(sendData);
+        sp.Write(sendData);
 
-        // SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
-        // sp.Open();
-        // sp.ReadTimeout = 1;
-
-        // string sendData = "123";
-
-        // sp.Write(senData);
-
-        // sp.Close();
+        sp.Close();
     }
 }
