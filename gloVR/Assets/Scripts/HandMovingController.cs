@@ -23,7 +23,7 @@ public class HandMovingController : MonoBehaviour
   float beforeYPos = 0;
 
 	// 2. Initialize variables
-  void Start () 
+  void Start ()
   {
 
     print(Camera.main.aspect);
@@ -40,9 +40,9 @@ public class HandMovingController : MonoBehaviour
         hand = child.gameObject;
     }
     mouseWorldPosition = hand.transform.position;
-    
+
   }
-  
+
 	// 3. InitUDP
   private void InitUDP()
   {
@@ -54,7 +54,7 @@ public class HandMovingController : MonoBehaviour
     receiveThread.Start();
 
   }
-  
+
 	// 4. Receive Data
   private void ReceiveData()
   {
@@ -65,7 +65,7 @@ public class HandMovingController : MonoBehaviour
     {
 
       try{
-        
+
         IPEndPoint anyIP = new IPEndPoint(IPAddress.Parse("0.0.0.0"), port);
         byte[] data = client.Receive(ref anyIP);
 
@@ -86,9 +86,9 @@ public class HandMovingController : MonoBehaviour
 	// 5. Make the Player move
   public void MoveHand()
   {
-  
+
 		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
-			
+
     int index1 = text.IndexOf(',');
     int index2 = text.Length - index1 - 1;
     String string_xpos = text.Substring(0,index1);
@@ -97,12 +97,18 @@ public class HandMovingController : MonoBehaviour
     float xPos = float.Parse(string_xpos);
     float yPos = float.Parse(string_ypos);
 
-    // print(xPos);
-    // print(yPos);
+    //print(xPos);
+    //print(yPos);
 
-
+    //TODO
+    /*xPos = xPos * 8 + beforeXPos * 2;
+    yPos = yPos * 8 + beforeYPos * 2;
+    xPos = xPos/10;
+    yPos = yPos/10;
+    */
     if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeXPos - xPos) > 10) )
     {
+
       mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
 
       Debug.Log(mouseWorldPosition);
@@ -111,12 +117,12 @@ public class HandMovingController : MonoBehaviour
       beforeXPos = xPos;
       beforeYPos = yPos;
     }
-    
+
   }
 
 
 	// 6. Check for variable value, and make the Player Jump!
-  void Update () 
+  void Update ()
   {
     if(jump == true)
     {
