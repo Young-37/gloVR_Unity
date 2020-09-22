@@ -18,6 +18,11 @@ public class hand_motion : MonoBehaviour
 	//serial ports
 	// SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
 
+	//receive char data
+	string receiveData1;
+	string receiveData2;
+	string receiveData3;
+
 	// hand
 	private GameObject hand;
 
@@ -84,7 +89,7 @@ public class hand_motion : MonoBehaviour
 	{
 		//port open
 		// sp.Open();
-        // sp.ReadTimeout = 1;
+        // sp.ReadTimeout = 500;
 		// print("Serial ports open");
 
 		// animation component
@@ -201,15 +206,33 @@ public class hand_motion : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		//test port
+		// hand ratate 
 		// if(sp.IsOpen){
 		// 	try{
-		// 		print(sp.ReadByte());
+		// 		receiveData1 = sp.ReadLine();
+		// 		receiveData2 = sp.ReadLine();
+		// 		receiveData3 = sp.ReadLine();
 		// 	}
 		// 	catch(System.Exception e){
 		// 		Debug.Log(e);
 		// 	}
 		// }
+
+		// Debug.Log("---------------------");
+		// Debug.Log(receiveData1);
+		// Debug.Log(receiveData2);
+		// Debug.Log(receiveData3);
+		// Debug.Log("---------------------");
+
+		// float yaw = float.Parse(receiveData1);
+		// float roll = float.Parse(receiveData2);
+		// float pitch = float.Parse(receiveData3);
+
+		// yaw = (float)(yaw * 180 / 3.14);
+		// roll = (float)(roll * 180 / 3.14);
+		// pitch = (float)(pitch * 180 / 3.14);
+
+		// hand.transform.rotation = Quaternion.Euler(yaw,roll,pitch);
 
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
