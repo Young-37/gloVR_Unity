@@ -9,9 +9,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO.Ports;
 
 public class hand_motion : MonoBehaviour
 {
+
+	//serial ports
+	// SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
+
 	// hand
 	private GameObject hand;
 
@@ -70,6 +75,11 @@ public class hand_motion : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		//port open
+		// sp.Open();
+        // sp.ReadTimeout = 1;
+		// print("Serial ports open");
+
 		// animation component
 		anim = this.GetComponent<Animation>();
 
@@ -177,6 +187,16 @@ public class hand_motion : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		//test port
+		// if(sp.IsOpen){
+		// 	try{
+		// 		print(sp.ReadByte());
+		// 	}
+		// 	catch(System.Exception e){
+		// 		Debug.Log(e);
+		// 	}
+		// }
+
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{

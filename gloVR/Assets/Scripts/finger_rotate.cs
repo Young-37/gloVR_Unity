@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO.Ports;
 
 public class finger_rotate : MonoBehaviour
 {
 	// main camera
 	//private Camera mainCamera;
+
+	//port open
+	SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
 
 	// hand
 	private GameObject hand;
@@ -62,6 +66,10 @@ public class finger_rotate : MonoBehaviour
     {
 		// find main camera
 		//mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+        sp.Open();
+        sp.ReadTimeout = 1;
+		print("Serial ports open");
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -175,6 +183,15 @@ public class finger_rotate : MonoBehaviour
 		//{
 		//	finger_degree = -130;
 		//}
+		if(sp.IsOpen){
+			print("okay");
+			try{
+				print(sp.ReadByte());
+			}
+			catch(System.Exception e){
+				Debug.Log(e);
+			}
+		}
 
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
