@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ball_control : MonoBehaviour
 {
@@ -16,13 +15,10 @@ public class ball_control : MonoBehaviour
 	private Vector3 moveVector;
 
 	// about difficulty & game
-	public float speed;
-	public float distance;
-	public int range;
-	private int score;
-
-	// UI
-	public Text scoreText;
+	private float speed;
+	private float distance;
+	private int range;
+	public int level;
 
 	// Start is called before the first frame update
 	void Start()
@@ -41,8 +37,7 @@ public class ball_control : MonoBehaviour
 		speed = 0.5f;
 		distance = 1f;
 		range = 3;
-		score = 0;
-		scoreText.text = string.Format("Score: {0}", score);
+		level = Random.Range(1, 3);
 	}
 
     // Update is called once per frame
@@ -64,20 +59,12 @@ public class ball_control : MonoBehaviour
 
 			targetPos = new Vector3(targetX, targetY, targetZ);
 			moveVector = targetPos - this.transform.position;
-
-			Debug.Log(targetPos);
 		}
 		
 		if (this.transform.position != targetPos)
 		{
 			this.transform.Translate(moveVector * Time.deltaTime * speed, Space.World);
 			this.transform.Rotate(moveVector);
-
-			//if (Vector3.Distance(this.transform.position, hand.transform.position) > 10f)
-			//{
-			//	// put ball at start point
-			//	this.transform.position = new Vector3(0, 0.5f, -11f);
-			//}
 		}
 
 		// catch ball
@@ -89,14 +76,13 @@ public class ball_control : MonoBehaviour
 			targetPos = this.transform.position;
 
 			hand_Motion.catch_ball = true;
-
-			score = score + 10;
-			scoreText.text = string.Format("Score: {0}", score);
+			hand_Motion.add_score = true;
 		}
 
 		// fail ball
 		if (this.transform.position.z > 10f)
 		{
+			hand_Motion.fail_ball_num = hand_Motion.fail_ball_num + 1;
 			// put ball at start point
 			this.transform.position = new Vector3(0, 0.5f, -11f);
 			// stop ball

@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
+using UnityEngine.UI;
 
 public class hand_motion : MonoBehaviour
 {
@@ -66,8 +67,14 @@ public class hand_motion : MonoBehaviour
 	// catch ball
 	private GameObject catch_ball_object;
 	public bool catch_ball;
+	public bool add_score;
 	private Animation anim;
 	private float timer;
+	private int score;
+	public int fail_ball_num;
+
+	// UI
+	public Text scoreText;
 
 	// mouse click point
 	private Vector3 mouseWorldPosition;
@@ -89,6 +96,13 @@ public class hand_motion : MonoBehaviour
 
 		// timer
 		timer = 0.0f;
+
+		// catch ball
+		score = 0;
+		scoreText.text = string.Format("Score: {0}", score);
+		catch_ball = false;
+		add_score = false;
+		fail_ball_num = 0;
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -415,17 +429,31 @@ public class hand_motion : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
-			catch_ball_object.transform.localPosition = new Vector3(0, -0.05f, -0.12f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
-			catch_ball_object.gameObject.SetActive(true);
-			anim.Play("hold_ball");
+			if (add_score)
+			{
+				catch_ball_object.transform.localPosition = new Vector3(0, -0.05f, -0.12f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
+				catch_ball_object.gameObject.SetActive(true);
+				anim.Play("hold_ball");
+				score = score + 10;
+				scoreText.text = string.Format("Score: {0}", score);
+				add_score = false;
+			}
+
 			timer += Time.deltaTime;
+
 			if (timer > 1.0f)
 			{
 				catch_ball = false;
 				catch_ball_object.gameObject.SetActive(false);
 				timer = 0.0f;
 			}
-			//catch_ball_object.gameObject.SetActive(false);
+		}
+
+		// exit game
+		if (fail_ball_num > 3)
+		{
+			UnityEditor.EditorApplication.isPlaying = false;
+			Application.Quit();
 		}
 	}
 
