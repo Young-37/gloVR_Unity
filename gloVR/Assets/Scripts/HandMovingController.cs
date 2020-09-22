@@ -101,12 +101,13 @@ public class HandMovingController : MonoBehaviour
     //print(yPos);
 
     //TODO
-    /*xPos = xPos * 8 + beforeXPos * 2;
-    yPos = yPos * 8 + beforeYPos * 2;
-    xPos = xPos/10;
-    yPos = yPos/10;
-    */
-    if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeXPos - xPos) > 10) )
+    xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
+    yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
+
+
+
+
+    if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10) )
     {
 
       mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
