@@ -11,6 +11,7 @@ public class ball_control : MonoBehaviour
 	private GameObject hand;
 
 	// target vector
+	private Vector3 startPos;
 	private Vector3 targetPos;
 	private Vector3 moveVector;
 
@@ -29,14 +30,15 @@ public class ball_control : MonoBehaviour
 		hand_Motion = hand.GetComponent<hand_motion>();
 
 		// put ball at start point
-		targetPos = new Vector3(0, 0.5f, -11f);
+		startPos = new Vector3(33f, 0.7f, 15f);
+		targetPos = startPos;
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
 
 		// initialization
 		speed = 0.5f;
 		distance = 1f;
-		range = 3;
+		range = 2;
 		level = Random.Range(1, 3);
 	}
 
@@ -46,17 +48,18 @@ public class ball_control : MonoBehaviour
 		if (Input.GetKeyUp(KeyCode.S))
 		{
 			// put ball at start point
-			this.transform.position = new Vector3(0, 0.5f, -11f);
+			this.transform.position = startPos;
 
 			// set target point
-			float targetX = Random.Range(0 - range, 0 + range);
-			float targetY = Random.Range(0.5f - range, 0.5f + range) + 0.95f;
-			if (targetY < 0.5f)
+			float targetX = Random.Range(35 - range, 35 + range);
+			float targetY = Random.Range(2 - range, 2 + range) + 0.95f;
+			if (targetY < 0.7f)
 			{
-				targetY = 0.5f;
+				targetY = 0.7f;
 			}
 			float targetZ = hand.transform.position.z - 0.46f;
 
+			Debug.Log(targetPos);
 			targetPos = new Vector3(targetX, targetY, targetZ);
 			moveVector = targetPos - this.transform.position;
 		}
@@ -71,7 +74,7 @@ public class ball_control : MonoBehaviour
 		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance)
 		{
 			// put ball at start point
-			this.transform.position = new Vector3(0, 0.5f, -11f);
+			this.transform.position = startPos;
 			// stop ball
 			targetPos = this.transform.position;
 
@@ -80,11 +83,11 @@ public class ball_control : MonoBehaviour
 		}
 
 		// fail ball
-		if (this.transform.position.z > 10f)
+		if (this.transform.position.z > (hand.transform.position.z + 5f))
 		{
 			hand_Motion.fail_ball_num = hand_Motion.fail_ball_num + 1;
 			// put ball at start point
-			this.transform.position = new Vector3(0, 0.5f, -11f);
+			this.transform.position = startPos;
 			// stop ball
 			targetPos = this.transform.position;
 		}
