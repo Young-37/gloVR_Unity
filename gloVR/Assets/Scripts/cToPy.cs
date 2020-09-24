@@ -13,9 +13,12 @@ namespace UDP
       // Start is called before the first frame update
       public void SendHello()
       {
-        UDPSocket s = new UDPSocket();
+        /*UDPSocket s = new UDPSocket();
         s.Server("127.0.0.1",27000);
-        s.Send("Hello World!");
+        s.Send("Hello World!");*/
+        UDPSocket c = new UDPSocket();
+        c.Client("127.0.0.1", 8000);
+        c.Send("Hello!");
 
         Console.ReadKey();
       }
