@@ -18,7 +18,7 @@ namespace UDP
         s.Send("Hello World!");*/
         UDPSocket c = new UDPSocket();
         c.Client("127.0.0.1", 8000);
-        c.Send("Hello!");
+        c.Send("a");
 
         Console.ReadKey();
       }
