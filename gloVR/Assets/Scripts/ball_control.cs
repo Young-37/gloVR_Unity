@@ -30,7 +30,7 @@ public class ball_control : MonoBehaviour
 		hand_Motion = hand.GetComponent<hand_motion>();
 
 		// put ball at start point
-		startPos = new Vector3(33f, 0.7f, 15f);
+		startPos = this.transform.position;
 		targetPos = startPos;
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
@@ -39,7 +39,7 @@ public class ball_control : MonoBehaviour
 		speed = 0.5f;
 		distance = 1f;
 		range = 2;
-		level = Random.Range(1, 3);
+		level = 0;
 	}
 
     // Update is called once per frame
@@ -47,6 +47,8 @@ public class ball_control : MonoBehaviour
     {
 		if (Input.GetKeyUp(KeyCode.S))
 		{
+			level = Random.Range(1, 4);
+
 			// put ball at start point
 			this.transform.position = startPos;
 

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class hand_motion : MonoBehaviour
 {
@@ -475,8 +476,7 @@ public class hand_motion : MonoBehaviour
 		// exit game
 		if (fail_ball_num > 3)
 		{
-			UnityEditor.EditorApplication.isPlaying = false;
-			Application.Quit();
+			SceneManager.LoadScene("GameOverScene");
 		}
 	}
 

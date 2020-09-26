@@ -24,7 +24,7 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         switch(currentType){
             case BTNType.Start:
             Debug.Log("Start");
-            SceneManager.LoadScene("HandMotion");
+            SceneManager.LoadScene("LoadingScene");
             break;
 
             case BTNType.Setting:
