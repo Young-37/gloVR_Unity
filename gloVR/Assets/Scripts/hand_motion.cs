@@ -474,7 +474,7 @@ public class hand_motion : MonoBehaviour
 		}
 
 		// exit game
-		if (fail_ball_num > 3)
+		if (fail_ball_num > 2)
 		{
 			SceneManager.LoadScene("GameOverScene");
 		}
