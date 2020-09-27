@@ -2713,7 +2713,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "\uAC8C\uC784 \uC2DC\uC791\n"
 --- !u!222 &456974191
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3004,7 +3004,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 493202006}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 493202008}
+        m_MethodName: SendEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &493202006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7294,7 +7305,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "\uAC8C\uC784 \uC885\uB8CC\n"
 --- !u!222 &1533599433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8031,7 +8042,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1803623112}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1803623114}
+        m_MethodName: SendOutGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1803623112
 MonoBehaviour:
   m_ObjectHideFlags: 0
