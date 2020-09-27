@@ -64,11 +64,11 @@ public class hand_motion : MonoBehaviour
 	private int finger_degree;
 
 	// flex value
-	private int thumb_flex;
-	private int index_finger_flex;
-	private int middle_finger_flex;
-	private int ring_finger_flex;
-	private int pinky_flex;
+	public int thumb_flex;
+	public int index_finger_flex;
+	public int middle_finger_flex;
+	public int ring_finger_flex;
+	public int pinky_flex;
 
 	// catch ball
 	private GameObject catch_ball_object;
@@ -315,7 +315,7 @@ public class hand_motion : MonoBehaviour
 			}
 
 			// print rotation value
-			Debug.Log(finger_degree);
+			Debug.Log(finger_flex);
 			Debug.Log("--------------------------------------------------");
 		}
 		if (Input.GetKey(KeyCode.DownArrow) && finger_1 != thumb_1)
@@ -356,7 +356,7 @@ public class hand_motion : MonoBehaviour
 			}
 
 			// print rotation value
-			Debug.Log(finger_degree);
+			Debug.Log(finger_flex);
 			Debug.Log("--------------------------------------------------");
 		}
 
@@ -381,7 +381,7 @@ public class hand_motion : MonoBehaviour
 			thumb_flex = finger_flex;
 
 			// print rotation value
-			Debug.Log(finger_degree);
+			Debug.Log(finger_flex);
 			Debug.Log("--------------------------------------------------");
 		}
 		if (Input.GetKey(KeyCode.DownArrow) && finger_1 == thumb_0)
@@ -406,7 +406,7 @@ public class hand_motion : MonoBehaviour
 			thumb_flex = finger_flex;
 
 			// print rotation value
-			Debug.Log(finger_degree);
+			Debug.Log(finger_flex);
 			Debug.Log("--------------------------------------------------");
 		}
 

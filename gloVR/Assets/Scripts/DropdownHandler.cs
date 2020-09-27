@@ -15,10 +15,10 @@ public class DropdownHandler : MonoBehaviour
             dropdown.options.Clear();
 
             List<string> items = new List<string>();
-            items.Add("0단계");
-            items.Add("1단계");
-            items.Add("2단계");
-            items.Add("3단계");
+            items.Add("level 0");
+            items.Add("level 1");
+            items.Add("level 2");
+            items.Add("level 3");
 
             //Fill Dropdown with items
             foreach(var item in items){

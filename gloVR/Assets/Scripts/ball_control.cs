@@ -30,7 +30,7 @@ public class ball_control : MonoBehaviour
 		hand_Motion = hand.GetComponent<hand_motion>();
 
 		// put ball at start point
-		startPos = this.transform.position;
+		startPos = new Vector3(36, 3, 4);
 		targetPos = startPos;
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
@@ -38,7 +38,7 @@ public class ball_control : MonoBehaviour
 		// initialization
 		speed = 0.5f;
 		distance = 1f;
-		range = 2;
+		range = 1;
 		level = 0;
 	}
 
@@ -54,10 +54,10 @@ public class ball_control : MonoBehaviour
 
 			// set target point
 			float targetX = Random.Range(35 - range, 35 + range);
-			float targetY = Random.Range(2 - range, 2 + range) + 0.95f;
-			if (targetY < 0.7f)
+			float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
+			if (targetY < 1.6f)
 			{
-				targetY = 0.7f;
+				targetY = 1.6f;
 			}
 			float targetZ = hand.transform.position.z - 0.46f;
 
@@ -72,8 +72,14 @@ public class ball_control : MonoBehaviour
 			this.transform.Rotate(moveVector);
 		}
 
-		// catch ball
-		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance)
+		// catch ball (distance, z value, flex value)
+		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance
+			&& this.transform.position.z < (hand.transform.position.z - 0.46f)
+			&& hand_Motion.thumb_flex < 120 
+			&& hand_Motion.index_finger_flex < 110
+			&& hand_Motion.middle_finger_flex < 110
+			&& hand_Motion.ring_finger_flex < 110
+			&& hand_Motion.pinky_flex < 110)
 		{
 			// put ball at start point
 			this.transform.position = startPos;
