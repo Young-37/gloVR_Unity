@@ -79,6 +79,11 @@ public class hand_motion : MonoBehaviour
 	private int score;
 	public int fail_ball_num;
 
+	// baseball UI
+	public GameObject baseball1;
+	public GameObject baseball2;
+	public GameObject baseball3;
+
 	// UI
 	public Text scoreText;
 
@@ -470,6 +475,36 @@ public class hand_motion : MonoBehaviour
 				catch_ball = false;
 				catch_ball_object.gameObject.SetActive(false);
 				timer = 0.0f;
+
+				// set finger as flex value
+
+				finger_degree = -130;
+				thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
+				thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
+				thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
+
+				index_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+				index_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+				index_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+
+				middle_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+				middle_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+				middle_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+
+				ring_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+				ring_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+				ring_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+
+				pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+				pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+				pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+
+				//set finger's flex value
+				thumb_flex = finger_degree + 180;
+				index_finger_flex = finger_degree + 180;
+				middle_finger_flex = finger_degree + 180;
+				ring_finger_flex = finger_degree + 180;
+				pinky_flex = finger_degree + 180;
 			}
 		}
 
