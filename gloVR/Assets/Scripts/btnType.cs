@@ -89,10 +89,10 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             sendData = sendData.Insert(sendData.Length,dropdown.value.ToString());
         }
 
-        sendData = sendData.Insert(sendData.Length,"e");
+        sendData = sendData.Insert(sendData.Length,"e\n");
         print(sendData);
 
         SPHandler.SendString(sendData);
-        
+
     }
 }

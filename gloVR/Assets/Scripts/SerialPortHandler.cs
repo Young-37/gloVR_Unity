@@ -39,6 +39,39 @@ public class SerialPortHandler : MonoBehaviour
         }
     }
 
+    // public string ReceiveString(){
+    //     if(sp.IsOpen){
+    //         try{
+    //             string recv_data = sp.ReadLine();
+    //             Debug.Log(recv_data);
+    //             return recv_data;
+    //         }
+    //         catch(System.Exception e){
+    //             Debug.Log(e);
+    //         }
+    //     }
+    //     else{
+    //         return "0";
+    //     }
+    // }
+
+    public bool IsConnected(){
+        int b = 0;
+        
+        if(sp.IsOpen){
+            try{                
+                b = sp.ReadByte();
+            }
+            catch(System.Exception e){
+                Debug.Log(e);
+            }
+            if(b != 0){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
 
