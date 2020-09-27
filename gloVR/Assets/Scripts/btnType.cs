@@ -15,6 +15,8 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public CanvasGroup MainGroup;
     public CanvasGroup OptionGroup;
 
+    private SerialPortHandler SPHandler;
+
     private void Start(){
         defaultScale = buttonScale.localScale;
     }
@@ -75,9 +77,7 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void SendArduino(){
 
-        SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
-        sp.Open();
-        sp.ReadTimeout = 1;
+        SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
 
         var op = GameObject.Find("OptionGroup");
         Dropdown[] dropdowns = op.GetComponentsInChildren<Dropdown>();
@@ -91,8 +91,8 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         sendData = sendData.Insert(sendData.Length,"e");
         print(sendData);
-        sp.Write(sendData);
 
-        sp.Close();
+        SPHandler.SendString(sendData);
+        
     }
 }
