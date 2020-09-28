@@ -87,7 +87,7 @@ public class HandMovingController : MonoBehaviour
   public void MoveHand()
   {
 
-		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
+	Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
     int index1 = text.IndexOf(',');
     int index2 = text.Length - index1 - 1;

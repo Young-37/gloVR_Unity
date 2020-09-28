@@ -98,6 +98,21 @@ public class ball_control : MonoBehaviour
 			this.transform.position = startPos;
 			// stop ball
 			targetPos = this.transform.position;
+
+			if (hand_Motion.fail_ball_num == 1)
+			{
+				hand_Motion.baseball3.gameObject.SetActive(false);
+			}
+
+			if (hand_Motion.fail_ball_num == 2)
+			{
+				hand_Motion.baseball2.gameObject.SetActive(false);
+			}
+
+			if (hand_Motion.fail_ball_num == 3)
+			{
+				hand_Motion.baseball1.gameObject.SetActive(false);
+			}
 		}
 	}
 }
