@@ -748,7 +748,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2254121742263221290, guid: f217176b6f4121e4ab906f90357b782e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f217176b6f4121e4ab906f90357b782e, type: 3}
 --- !u!1 &118212071
 GameObject:
@@ -1855,6 +1856,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221352151}
   m_Mesh: {fileID: 4300000, guid: 85710620bfaf81242ae16c1e6f93838b, type: 3}
+--- !u!1 &225809372 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2255164239671183392, guid: f217176b6f4121e4ab906f90357b782e,
+    type: 3}
+  m_PrefabInstance: {fileID: 93774395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &225809373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225809372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6442dba6de67406c81867fc87868bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thumb_flex: 0
+  index_finger_flex: 0
+  middle_finger_flex: 0
+  ring_finger_flex: 0
+  pinky_flex: 0
+  catch_ball: 0
+  add_score: 0
+  fail_ball_num: 0
+  baseball1: {fileID: 0}
+  baseball2: {fileID: 0}
+  baseball3: {fileID: 0}
+  scoreText: {fileID: 0}
 --- !u!1 &259119839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2915,7 +2946,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1783051103}
+      - m_Target: {fileID: 0}
         m_MethodName: ReleaseHand
         m_Mode: 1
         m_Arguments:
@@ -5083,7 +5114,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1783051103}
+      - m_Target: {fileID: 0}
         m_MethodName: GripHand
         m_Mode: 1
         m_Arguments:
@@ -8600,7 +8631,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1783051103}
+      - m_Target: {fileID: 0}
         m_MethodName: ResetHand
         m_Mode: 1
         m_Arguments:
@@ -9098,18 +9129,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1783051103 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2254121742263221290, guid: f217176b6f4121e4ab906f90357b782e,
-    type: 3}
-  m_PrefabInstance: {fileID: 93774395}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91f1842526bbcdd40a9a2bbc87bcf95a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1801530981
 GameObject:
   m_ObjectHideFlags: 0

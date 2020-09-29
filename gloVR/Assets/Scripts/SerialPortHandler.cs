@@ -14,7 +14,7 @@ public class SerialPortHandler : MonoBehaviour
     void Start()
     {
         //port open
-        sp.ReadTimeout = 50;
+        sp.ReadTimeout = 100;
         sp.Open();
         print("Serial ports open");   
     }
@@ -73,7 +73,7 @@ public class SerialPortHandler : MonoBehaviour
         return false;
     }
 
-    public bool ReceiveArduinoData(int[] flex_data, float[] zyro_data){
+    public bool ReceiveArduinoData(ref int[] flex_data,ref float[] zyro_data){
         int start_byte = 0;
         int end_byte = 0;
 

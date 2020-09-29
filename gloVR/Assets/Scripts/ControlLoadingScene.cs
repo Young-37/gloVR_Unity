@@ -10,6 +10,7 @@ public class ControlLoadingScene : MonoBehaviour
   public float max;
 
   private SerialPortHandler SPHandler;
+  private UDPHandler UHandler;
   string start_string = "s1e";
   
   float timer;
@@ -20,6 +21,8 @@ public class ControlLoadingScene : MonoBehaviour
   void Start()
   {
     SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    
     max = progressBar.maxValue;
 
     timer = 0;

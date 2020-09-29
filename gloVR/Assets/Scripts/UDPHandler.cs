@@ -1,21 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using UDP;
 
 public class UDPHandler : MonoBehaviour
 {
+    UDPSocket sk = new UDPSocket();
+
     void Awake(){
         DontDestroyOnLoad(gameObject);
     }
-    // // Start is called before the first frame update
-    // void Start()
-    // {
-        
-    // }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
+    public void SendString(string sData)
+    {
+    sk.Client("127.0.0.1", 8000);
+    sk.Send(sData);
+
+    Console.ReadKey();
+    }
+
 }
