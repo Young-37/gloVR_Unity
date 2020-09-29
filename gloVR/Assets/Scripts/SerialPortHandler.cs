@@ -73,6 +73,60 @@ public class SerialPortHandler : MonoBehaviour
         return false;
     }
 
+    public bool ReceiveArduinoData(int[] flex_data, float[] zyro_data){
+        int start_byte = 0;
+        int end_byte = 0;
+
+        int i = 0;
+        string receiveData1 = "";
+        string receiveData2 = "";
+        string receiveData3 = "";
+        float yaw;
+        float pitch;
+        float roll;
+
+
+        if(sp.IsOpen){
+            try{
+                start_byte = sp.ReadByte();
+            }
+            catch(System.Exception e){
+                Debug.Log(e);
+            }
+
+            if(start_byte == 200){
+                for(i=0;i<5;i++){
+                    flex_data[i] = sp.ReadByte();
+                }
+
+                receiveData1 = sp.ReadLine();
+                receiveData2 = sp.ReadLine();
+                receiveData3 = sp.ReadLine();
+                
+                end_byte = sp.ReadByte();
+            }
+
+            if(end_byte == 201){
+                yaw = float.Parse(receiveData1);
+                pitch = float.Parse(receiveData2);
+                roll = float.Parse(receiveData3);
+
+                yaw = (float)(yaw * 180 / 3.14);
+                pitch = (float)(pitch * 180 / 3.14);
+                roll = (float)(roll * 180 / 3.14);
+
+                zyro_data[0] = yaw;
+                zyro_data[1] = pitch;
+                zyro_data[2] = roll;
+
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
 }
 
 
