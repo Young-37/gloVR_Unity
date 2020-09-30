@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ball_control : MonoBehaviour
+public class BallController : MonoBehaviour
 {
-	// get hand_motion script (for catch_ball)
-	private hand_motion hand_Motion;
-
 	// hand
 	private GameObject hand;
+
+	// get HandController script (for catch_ball)
+	private HandController hand_Motion;
 
 	// target vector
 	private Vector3 startPos;
@@ -18,8 +18,12 @@ public class ball_control : MonoBehaviour
 	// about difficulty & game
 	private float speed;
 	private float distance;
-	private int range;
+	private float range;
 	public int level;
+
+	public GameObject baseballPlayerBall;
+	public bool throwBall;
+	private bool isFlying;
 
 	// Start is called before the first frame update
 	void Start()
@@ -27,33 +31,44 @@ public class ball_control : MonoBehaviour
 		// find Hand object
 		hand = GameObject.Find("Hand");
 
-		hand_Motion = hand.GetComponent<hand_motion>();
+		hand_Motion = hand.GetComponent<HandController>();
 
 		// put ball at start point
-		startPos = new Vector3(36, 3, 4);
+		startPos = baseballPlayerBall.transform.position; ;
 		targetPos = startPos;
 		this.transform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
 
 		// initialization
-		speed = 0.5f;
+		speed = 0.3f;
 		distance = 1f;
-		range = 1;
+		range = 1f;
 		level = 0;
+
+		isFlying = false;
+		throwBall = false;
 	}
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyUp(KeyCode.S))
+		if (!isFlying)
+		{
+			this.transform.position = baseballPlayerBall.transform.position;
+			targetPos = this.transform.position;
+			moveVector = new Vector3(0, 0, 0);
+		}
+
+		if (throwBall)
 		{
 			level = Random.Range(1, 4);
 
 			// put ball at start point
-			this.transform.position = startPos;
+			this.gameObject.SetActive(true);
+			this.transform.position = baseballPlayerBall.transform.position;
 
 			// set target point
-			float targetX = Random.Range(35 - range, 35 + range);
+			float targetX = Random.Range(35f - range, 35f + range);
 			float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
 			if (targetY < 1.6f)
 			{
@@ -64,10 +79,14 @@ public class ball_control : MonoBehaviour
 			Debug.Log(targetPos);
 			targetPos = new Vector3(targetX, targetY, targetZ);
 			moveVector = targetPos - this.transform.position;
+
+			throwBall = false;
+			isFlying = true;
 		}
 		
-		if (this.transform.position != targetPos)
+		if (isFlying && !throwBall)
 		{
+			//this.transform.position != targetPos
 			this.transform.Translate(moveVector * Time.deltaTime * speed, Space.World);
 			this.transform.Rotate(moveVector);
 		}
@@ -79,8 +98,11 @@ public class ball_control : MonoBehaviour
 			&& hand_Motion.index_finger_flex < 110
 			&& hand_Motion.middle_finger_flex < 110
 			&& hand_Motion.ring_finger_flex < 110
-			&& hand_Motion.pinky_flex < 110)
+			&& hand_Motion.pinky_flex < 110
+			&& isFlying)
 		{
+			isFlying = false;
+
 			// put ball at start point
 			this.transform.position = startPos;
 			// stop ball
@@ -91,8 +113,10 @@ public class ball_control : MonoBehaviour
 		}
 
 		// fail ball
-		if (this.transform.position.z > (hand.transform.position.z + 5f))
+		if (this.transform.position.z > (hand.transform.position.z + 2f) && isFlying)
 		{
+			isFlying = false;
+
 			hand_Motion.fail_ball_num = hand_Motion.fail_ball_num + 1;
 			// put ball at start point
 			this.transform.position = startPos;

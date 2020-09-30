@@ -82,7 +82,7 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
-         SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+         //SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
 
 		// animation component
 		anim = this.GetComponent<Animation>();
@@ -198,10 +198,10 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-        if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
-            RotateFinger(flexData);
-            hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-        }
+        // if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
+        //     RotateFinger(flexData);
+        //     hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+        // }
 
 
 		// change finger (thumb)
@@ -380,24 +380,24 @@ public class HandController : MonoBehaviour
 		}
 
 		// when mouse button down
-		// if (Input.GetMouseButtonUp(0))
-		// {
-		// 	// change hand's world coordinate to screen coordinate (to get z(depth) value)
-		// 	Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
+		if (Input.GetMouseButtonUp(0))
+		{
+			// change hand's world coordinate to screen coordinate (to get z(depth) value)
+			Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
-		// 	// change mouse's screen coordinate to world coordinate
-		// 	mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
-		// 	print(Input.mousePosition.x);
-		// 	print(Input.mousePosition.y);
-		// 	//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
-		// 	//mouseWorldPosition.y = mouseWorldPosition.y;
-		// }
+			// change mouse's screen coordinate to world coordinate
+			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+			print(Input.mousePosition.x);
+			print(Input.mousePosition.y);
+			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+			//mouseWorldPosition.y = mouseWorldPosition.y;
+		}
 
-		// // move hand
-		// if (hand.transform.position != mouseWorldPosition)
-		// {
-		// 	hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
-		// }
+		// move hand
+		if (hand.transform.position != mouseWorldPosition)
+		{
+			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
+		}
 
 		// rotate hand
 		// Roll (x)
@@ -439,36 +439,6 @@ public class HandController : MonoBehaviour
 				catch_ball = false;
 				catch_ball_object.gameObject.SetActive(false);
 				timer = 0.0f;
-
-				// set finger as flex value
-
-				finger_degree = -130;
-				thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
-				thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
-				thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
-
-				index_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				index_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				index_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-				middle_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				middle_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				middle_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-				ring_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				ring_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				ring_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-				pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-				//set finger's flex value
-				thumb_flex = finger_degree + 180;
-				index_finger_flex = finger_degree + 180;
-				middle_finger_flex = finger_degree + 180;
-				ring_finger_flex = finger_degree + 180;
-				pinky_flex = finger_degree + 180;
 			}
 		}
 
