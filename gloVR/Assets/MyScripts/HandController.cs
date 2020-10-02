@@ -248,13 +248,16 @@ public class HandController : MonoBehaviour
 		//Vector3 angle = Quaternion.Euler(0f, 3f, 0f);
 		if (Input.GetKey(KeyCode.UpArrow) && finger_1 != thumb_1)
 		{
+			// increase value
 			finger_flex += 1;
 			if (finger_flex > 180)
 			{
 				finger_flex = 180;
 			}
 
+			// set finger degree using flex value
 			finger_degree = finger_flex - 180;
+
 			if (finger_degree > 0)
 			{
 				finger_degree = 0;
@@ -289,13 +292,17 @@ public class HandController : MonoBehaviour
 		}
 		if (Input.GetKey(KeyCode.DownArrow) && finger_1 != thumb_1)
 		{
+			// decrease value
 			finger_flex -= 1;
+
 			if (finger_flex < 50)
 			{
 				finger_flex = 50;
 			}
 
+			// set finger degree using flex value
 			finger_degree = finger_flex - 180;
+
 			if (finger_degree < -130)
 			{
 				finger_degree = -130;
@@ -331,13 +338,17 @@ public class HandController : MonoBehaviour
 
 		if (Input.GetKey(KeyCode.UpArrow) && finger_1 == thumb_0)
 		{
+			// increase value
 			finger_flex += 1;
+
 			if (finger_flex > 180)
 			{
 				finger_flex = 180;
 			}
 
+			// set finger degree using flex value
 			finger_degree = finger_flex - 180;
+
 			if (finger_degree > 0)
 			{
 				finger_degree = 0;
@@ -355,13 +366,17 @@ public class HandController : MonoBehaviour
 		}
 		if (Input.GetKey(KeyCode.DownArrow) && finger_1 == thumb_0)
 		{
+			// decrease value
 			finger_flex -= 1;
+
 			if (finger_flex < 50)
 			{
 				finger_flex = 50;
 			}
 
+			// set finger degree using flex value
 			finger_degree = finger_flex - 180;
+
 			if (finger_degree < -130)
 			{
 				finger_degree = -130;
@@ -422,11 +437,17 @@ public class HandController : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
+			// create catch ball and add score
 			if (add_score)
 			{
-				catch_ball_object.transform.localPosition = new Vector3(0, -0.05f, -0.12f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
+				// create catch ball
+				catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
 				catch_ball_object.gameObject.SetActive(true);
+
+				// play animation
 				anim.Play("hold_ball");
+
+				// add score and update UI
 				score = score + 10;
 				scoreText.text = string.Format("Score: {0}", score);
 				add_score = false;
@@ -434,11 +455,34 @@ public class HandController : MonoBehaviour
 
 			timer += Time.deltaTime;
 
-			if (timer > 1.0f)
+			// when animation end
+			if (timer > 1.7f)
 			{
 				catch_ball = false;
-				catch_ball_object.gameObject.SetActive(false);
+				// catch_ball_object.gameObject.SetActive(false);
 				timer = 0.0f;
+
+				// set finger as flex value
+				thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-(thumb_flex - 180) - 160) / 5), -25.86f);
+				thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -(thumb_flex - 180)) * 0.5f;
+				thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -(thumb_flex - 180)) * 0.3f;
+
+				index_finger_1.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.5f;
+				index_finger_2.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.8f;
+				index_finger_3.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.3f;
+
+				middle_finger_1.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.5f;
+				middle_finger_2.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.8f;
+				middle_finger_3.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.3f;
+
+				ring_finger_1.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.5f;
+				ring_finger_2.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.8f;
+				ring_finger_3.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.3f;
+
+				pinky_1.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.5f;
+				pinky_2.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
+				pinky_3.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
+
 			}
 		}
 
@@ -451,34 +495,48 @@ public class HandController : MonoBehaviour
 
 	public void GripHand()
 	{
-		finger_degree = -130;
+		// set finger as grip & set finger's flex value
 
-		// set finger as grip
+		// thumb
+		finger_degree = -50;
+
 		thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
 		thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
 		thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
+
+		thumb_flex = finger_degree + 180;
+
+		// index finger
+		finger_degree = -70;
 
 		index_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
 		index_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
 		index_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
+		index_finger_flex = finger_degree + 180;
+
+		// middle finger & ring finger
+		finger_degree = -65;
+
 		middle_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
 		middle_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
 		middle_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+
+		middle_finger_flex = finger_degree + 180;
 
 		ring_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
 		ring_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
 		ring_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
+		ring_finger_flex = finger_degree + 180;
+
+		finger_degree = -55;
+
+		// pinky
 		pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
-		//set finger's flex value
-		thumb_flex = finger_degree + 180;
-		index_finger_flex = finger_degree + 180;
-		middle_finger_flex = finger_degree + 180;
-		ring_finger_flex = finger_degree + 180;
 		pinky_flex = finger_degree + 180;
 	}
 
@@ -535,18 +593,17 @@ public class HandController : MonoBehaviour
 		index_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
 		index_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
 		index_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
-
+		
 		middle_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.5f;
 		middle_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.8f;
 		middle_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.3f;
-
+		
 		ring_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
 		ring_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
 		ring_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
-
+		
 		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
 	}
-
 }
