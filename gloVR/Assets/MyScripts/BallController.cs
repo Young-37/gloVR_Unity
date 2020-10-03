@@ -59,9 +59,9 @@ public class BallController : MonoBehaviour
 			moveVector = new Vector3(0, 0, 0);
 		}
 
-		if (throwBall)
+		if (throwBall && !hand_Motion.isCatching)
 		{
-			level = Random.Range(1, 4);
+			level = Random.Range(0, 4);
 
 			// put ball at start point
 			this.gameObject.SetActive(true);

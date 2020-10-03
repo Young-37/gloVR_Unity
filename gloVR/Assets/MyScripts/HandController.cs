@@ -70,13 +70,25 @@ public class HandController : MonoBehaviour
 	// catch ball
 	private GameObject catch_ball_object;
 	public bool catch_ball;
-	public bool fail_ball;
 	public bool add_score;
+	private int score;
+
+	// catching
+	public bool isCatching;
+	public int catching_thumb_flex;
+	public int catching_index_finger_flex;
+	public int catching_middle_finger_flex;
+	public int catching_ring_finger_flex;
+	public int catching_pinky_flex;
+
+	// fail ball
+	public bool fail_ball;
+	public int fail_ball_num;
+
+	// animation
 	public bool play_anim;
 	private Animation anim;
 	private float timer;
-	private int score;
-	public int fail_ball_num;
 
 	// baseball UI
 	public GameObject baseball1;
@@ -108,22 +120,33 @@ public class HandController : MonoBehaviour
       		Debug.Log(e);
     	}
 
-		// animation component
-		anim = this.GetComponent<Animation>();
-
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
 		catch_ball_object.gameObject.SetActive(false);
 
-		// timer
-		timer = 0.0f;
-
 		// catch ball
-		score = 0;
-		scoreText.text = string.Format("Score: {0}", score);
 		catch_ball = false;
 		add_score = false;
+		score = 0;
+		scoreText.text = string.Format("Score: {0}", score);
+
+		fail_ball = false;
 		fail_ball_num = 0;
+
+		// catching
+		isCatching = false;
+		catching_thumb_flex = 0;
+		catching_index_finger_flex = 0;
+		catching_middle_finger_flex = 0;
+		catching_ring_finger_flex = 0;
+		catching_pinky_flex = 0;
+
+		// animation component
+		anim = this.GetComponent<Animation>();
+		play_anim = false;
+
+		// timer
+		timer = 0.0f;
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -222,14 +245,14 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-        if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
-            RotateFinger(flexData);
-            hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-        }
-
-		if(UHandler.newData){
-			MoveHand();
-		}
+        // if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
+        //     RotateFinger(flexData);
+        //     hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+        // }
+		// 
+		// if(UHandler.newData){
+		// 	MoveHand();
+		// }
 
 
 
@@ -466,12 +489,19 @@ public class HandController : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
+			isCatching = true;
+			catching_thumb_flex = thumb_flex;
+			catching_index_finger_flex = index_finger_flex;
+			catching_middle_finger_flex = middle_finger_flex;
+			catching_ring_finger_flex = ring_finger_flex;
+			catching_pinky_flex = pinky_flex;
+
 			// create catch ball and add score
 			if (add_score)
 			{
 				// create catch ball
-				catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
-				catch_ball_object.gameObject.SetActive(true);
+				catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+				//catch_ball_object.gameObject.SetActive(true);
 
 				// add score and update UI
 				score = score + 10;
@@ -519,7 +549,18 @@ public class HandController : MonoBehaviour
 
 			}
 		}
+
+		if (isCatching)
+		{
+			catch_ball_object.gameObject.SetActive(true);
+		}
+
+		if (!isCatching)
+		{
+			catch_ball_object.gameObject.SetActive(false);
+		}
 		
+		// fail ball
 		if (fail_ball)
 		{
 			// play animation
@@ -568,6 +609,8 @@ public class HandController : MonoBehaviour
 			SceneManager.LoadScene("GameOverScene");
 		}
 	}
+
+//--------------------------------------------------------------------update end--------------------------------------------------------------------------------
 
 	public void GripHand()
 	{
