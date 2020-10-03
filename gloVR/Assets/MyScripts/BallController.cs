@@ -115,7 +115,6 @@ public class BallController : MonoBehaviour
 
 			hand_Motion.catch_ball = true;
 			hand_Motion.add_score = true;
-			hand_Motion.play_anim = true;
 		}
 
 		// fail ball
@@ -123,10 +122,11 @@ public class BallController : MonoBehaviour
 		{
 			isFlying = false;
 
+			// hand_Motion.fail_ball = true;
+			// hand_Motion.play_anim = true;
+
 			// set hand motion's value
-			hand_Motion.fail_ball = true;
 			hand_Motion.fail_ball_num = hand_Motion.fail_ball_num + 1;
-			hand_Motion.play_anim = true;
 
 			// put ball at start point
 			this.transform.position = startPos;
