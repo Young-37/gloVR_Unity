@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,12 +17,30 @@ public class ControlLoadingScene : MonoBehaviour
   float timer;
   float waiting_time;
 
+  bool sp;
+  bool up;
+
 
   // Start is called before the first frame update
   void Start()
   {
-    SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    try{
+      SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    }
+    catch(Exception e){
+      Debug.Log(e);
+    }
+
+    try{
+      UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    }
+    catch(Exception e){
+      Debug.Log(e);
+    }
+
+    UHandler.InitUDP();
+    sp = false;
+    up = false;
     
     max = progressBar.maxValue;
 
@@ -38,24 +57,33 @@ public class ControlLoadingScene : MonoBehaviour
     if(timer > waiting_time)
     {
       //serial port로 데이터 보내기
-      SPHandler.SendString(start_string);
+      try{
+        SPHandler.SendString(start_string);
+      }
+      catch(Exception e){
+        Debug.Log(e);
+      }
 
       //udp로 데이터 보내기
+      try{
+        UHandler.SendString("s");
+      }
+      catch(Exception e){
+        Debug.Log(e);
+      }
 
 
       //Serial으로 데이터 받기
-      if(SPHandler.IsConnected()){
-        progressBar.value += (float)0.3;
+      if(SPHandler.IsConnected() && !sp){
+        progressBar.value += (float)0.5;
+        sp = true;
       }
 
       //udp로 데이터 받기
-      
-      
-
-      
-
-      
-      // progressBar.value += Time.deltaTime;
+      if(UHandler.newData && !up){
+        progressBar.value += (float)0.5;
+        up = true;
+      }
 
       if (progressBar.value >= max)
       {
