@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,19 @@ public class ControlGameOverScene : MonoBehaviour
     void Start()
     {
 
-		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    	UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+		try{
+      		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
+
+    	try{
+      		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
 
 		text = GetComponent<Text>();
 		text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
@@ -32,8 +44,24 @@ public class ControlGameOverScene : MonoBehaviour
 			text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a + (Time.deltaTime/3.0f));
 		}
 
-		SPHandler.SendString(end_string);
+		//serial port로 데이터 보내기
+      	try{
+        	SPHandler.SendString(end_string);
+      	}
+      	catch(Exception e){
+        	Debug.Log(e);
+      	}
 		Debug.Log("Send End_string");
+
+      	//udp로 데이터 보내기
+      	try{
+        	UHandler.SendString("1");
+			UHandler.StopThread();
+      	}
+      	catch(Exception e){
+        	Debug.Log(e);
+      	}
+
 
 
 

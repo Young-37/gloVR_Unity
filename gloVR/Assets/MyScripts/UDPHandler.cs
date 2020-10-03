@@ -19,7 +19,7 @@ public class UDPHandler : MonoBehaviour
     UdpClient udpClient2;
 
     int port;
-    String text;
+    public String text;
     public bool newData;
 
     void start(){
@@ -79,6 +79,15 @@ public class UDPHandler : MonoBehaviour
                 Debug.Log(e);
                 }
 
+        }
+    }
+
+    public void StopThread(){
+        try{
+            receiveThread.Abort();
+        }
+        catch(Exception e){
+            Debug.Log(e);
         }
     }
 
