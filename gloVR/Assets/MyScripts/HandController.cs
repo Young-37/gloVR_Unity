@@ -492,7 +492,7 @@ public class HandController : MonoBehaviour
 
 			}
 		}
-
+		
 		if (fail_ball)
 		{
 			// play animation
