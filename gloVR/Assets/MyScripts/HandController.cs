@@ -62,7 +62,9 @@ public class HandController : MonoBehaviour
 	// catch ball
 	private GameObject catch_ball_object;
 	public bool catch_ball;
+	public bool fail_ball;
 	public bool add_score;
+	public bool play_anim;
 	private Animation anim;
 	private float timer;
 	private int score;
@@ -444,13 +446,18 @@ public class HandController : MonoBehaviour
 				catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);//new Vector3(hand.transform.position.x, hand.transform.position.y + 1.2f, hand.transform.position.z - 0.4f) - hand.transform.up;
 				catch_ball_object.gameObject.SetActive(true);
 
-				// play animation
-				anim.Play("hold_ball");
-
 				// add score and update UI
 				score = score + 10;
 				scoreText.text = string.Format("Score: {0}", score);
 				add_score = false;
+			}
+
+			// play animation
+			if (play_anim)
+			{
+				// play animation
+				anim.Play("hold_ball");
+				play_anim = false;
 			}
 
 			timer += Time.deltaTime;
@@ -483,6 +490,48 @@ public class HandController : MonoBehaviour
 				pinky_2.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
 				pinky_3.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
 
+			}
+		}
+
+		if (fail_ball)
+		{
+			// play animation
+			if (play_anim)
+			{
+				// play animation
+				anim.Play("no");
+				play_anim = false;
+			}
+
+			timer += Time.deltaTime;
+
+			// when animation end
+			if (timer > 1.6f)
+			{
+				fail_ball = false;
+
+				timer = 0.0f;
+
+				// set finger as flex value
+				thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-(thumb_flex - 180) - 160) / 5), -25.86f);
+				thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -(thumb_flex - 180)) * 0.5f;
+				thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -(thumb_flex - 180)) * 0.3f;
+
+				index_finger_1.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.5f;
+				index_finger_2.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.8f;
+				index_finger_3.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.3f;
+
+				middle_finger_1.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.5f;
+				middle_finger_2.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.8f;
+				middle_finger_3.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.3f;
+
+				ring_finger_1.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.5f;
+				ring_finger_2.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.8f;
+				ring_finger_3.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.3f;
+
+				pinky_1.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.5f;
+				pinky_2.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
+				pinky_3.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
 			}
 		}
 
