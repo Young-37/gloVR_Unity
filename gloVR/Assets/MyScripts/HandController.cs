@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +11,16 @@ public class HandController : MonoBehaviour
     //Serial Port Handler
     private SerialPortHandler SPHandler;
 
+	//Udp Socket Handler
+	private UDPHandler UHandler;
+
     //received data from arduino;
     int[] flexData = new int[5];
     float[] ypr = new float[3];
+
+	//data for openCV
+	float beforeXPos;
+	float beforeYPos;
 
 
     private GameObject hand;
@@ -84,7 +92,21 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
-         //SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+        //get SPHandler
+		try{
+      		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
+
+		//get UHandler
+    	try{
+      		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
 
 		// animation component
 		anim = this.GetComponent<Animation>();
@@ -200,10 +222,15 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-        // if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
-        //     RotateFinger(flexData);
-        //     hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-        // }
+        if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
+            RotateFinger(flexData);
+            hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+        }
+
+		if(UHandler.newData){
+			MoveHand();
+		}
+
 
 
 		// change finger (thumb)
@@ -654,5 +681,43 @@ public class HandController : MonoBehaviour
 		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
+	}
+
+	void MoveHand(){
+		string text = UHandler.text;
+
+		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
+
+    	int index1 = text.IndexOf(',');
+    	int index2 = text.Length - index1 - 1;
+    	String string_xpos = text.Substring(0,index1);
+    	String string_ypos = text.Substring(index1+1,index2);
+
+    	float xPos = float.Parse(string_xpos);
+    	float yPos = float.Parse(string_ypos);
+
+    	//print(xPos);
+    	//print(yPos);
+
+    	//filter1
+    	xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
+    	yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
+
+
+
+		//filter2
+    	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10) )
+    	{
+
+      		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
+
+      		Debug.Log(mouseWorldPosition);
+      		hand.transform.position = new Vector3(mouseWorldPosition.x,mouseWorldPosition.y,mouseWorldPosition.z);
+
+      		beforeXPos = xPos;
+      		beforeYPos = yPos;
+    	}
+		
+		UHandler.newData = false;
 	}
 }

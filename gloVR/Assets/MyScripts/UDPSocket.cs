@@ -45,7 +45,7 @@ namespace UDP
             }, state);
         }
 
-        private void Receive()
+        public void Receive()
         {
             _socket.BeginReceiveFrom(state.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv = (ar) =>
             {
