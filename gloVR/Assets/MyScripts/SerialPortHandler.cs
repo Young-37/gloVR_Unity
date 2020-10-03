@@ -7,6 +7,8 @@ public class SerialPortHandler : MonoBehaviour
 {
     SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
 
+    public string servoControl;
+
     void Awake(){
         DontDestroyOnLoad(gameObject);
     }
@@ -17,6 +19,8 @@ public class SerialPortHandler : MonoBehaviour
         sp.ReadTimeout = 100;
         sp.Open();
         print("Serial ports open");   
+
+        servoControl = "";
     }
 
     // Update is called once per frame
@@ -125,6 +129,18 @@ public class SerialPortHandler : MonoBehaviour
 
         return false;
 
+    }
+
+    public void setServo(int level){
+        int i=0;
+        for(i=1;i<6;i++){
+            char a = servoControl[i];
+            a = (char)((int)a + level);
+            servoControl = servoControl.Insert(i,a.ToString());
+            servoControl = servoControl.Remove(i+1,1);
+        }
+
+        Debug.Log(servoControl);
     }
 
 }

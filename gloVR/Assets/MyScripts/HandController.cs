@@ -233,16 +233,16 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-        // if(SPHandler.ReceiveArduinoData(ref flexData,ref ypr)){
-        //     RotateFinger(flexData);
-        //     hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-        // }
-		// 
-		// if(UHandler.newData){
-		// 	MoveHand();
-		// }
+		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 
-
+		if(! isCatching){
+			RotateFinger(flexData);
+			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+		}
+		
+		if(UHandler.newData){
+			MoveHand();
+		}
 
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -697,7 +697,7 @@ public class HandController : MonoBehaviour
 		int[] rotate_degree = new int[5];
 
 		for(int i=0;i<5;i++){
-			rotate_degree[i] = 180 - intDataArr[i];
+			rotate_degree[i] = intDataArr[i] - 180;
 		}
 
         thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-rotate_degree[0] - 160) / 5), -25.86f);
@@ -719,6 +719,13 @@ public class HandController : MonoBehaviour
 		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
+
+		thumb_flex = intDataArr[0];
+		index_finger_flex = intDataArr[1];
+		middle_finger_flex = intDataArr[2];
+		ring_finger_flex = intDataArr[3];
+		pinky_flex = intDataArr[4];
+
 	}
 
 	void MoveHand(){
@@ -734,14 +741,12 @@ public class HandController : MonoBehaviour
     	float xPos = float.Parse(string_xpos);
     	float yPos = float.Parse(string_ypos);
 
-    	//print(xPos);
-    	//print(yPos);
-
     	//filter1
     	xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
     	yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
 
-
+		xPos = (1000-xPos) * 1.5f;
+		yPos = (900-yPos) * 1.25f;
 
 		//filter2
     	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10) )

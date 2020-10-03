@@ -94,16 +94,16 @@ public class BallController : MonoBehaviour
 		// catch ball (distance, z value, flex value)
 		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance
 			&& this.transform.position.z < (hand.transform.position.z - 0.46f)
-			&& hand_Motion.thumb_flex < 140 
-			&& hand_Motion.index_finger_flex < 120
-			&& hand_Motion.middle_finger_flex < 125
-			&& hand_Motion.ring_finger_flex < 125
-			&& hand_Motion.pinky_flex < 135
-			&& hand_Motion.thumb_flex > 120
-			&& hand_Motion.index_finger_flex > 100
-			&& hand_Motion.middle_finger_flex > 105
-			&& hand_Motion.ring_finger_flex > 105
-			&& hand_Motion.pinky_flex > 115
+			// && hand_Motion.thumb_flex < 140 
+			// && hand_Motion.index_finger_flex < 120
+			// && hand_Motion.middle_finger_flex < 125
+			// && hand_Motion.ring_finger_flex < 125
+			// && hand_Motion.pinky_flex < 135
+			// && hand_Motion.thumb_flex > 120
+			// && hand_Motion.index_finger_flex > 100
+			// && hand_Motion.middle_finger_flex > 105
+			// && hand_Motion.ring_finger_flex > 105
+			// && hand_Motion.pinky_flex > 115
 			&& isFlying)
 		{
 			isFlying = false;
