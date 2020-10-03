@@ -70,16 +70,16 @@ public class HandController : MonoBehaviour
 	// catch ball
 	private GameObject catch_ball_object;
 	public bool catch_ball;
-	public bool add_score;
+	// public bool add_score;
 	private int score;
 
 	// catching
 	public bool isCatching;
-	public int catching_thumb_flex;
-	public int catching_index_finger_flex;
-	public int catching_middle_finger_flex;
-	public int catching_ring_finger_flex;
-	public int catching_pinky_flex;
+	private int catching_thumb_flex;
+	private int catching_index_finger_flex;
+	private int catching_middle_finger_flex;
+	private int catching_ring_finger_flex;
+	private int catching_pinky_flex;
 
 	// fail ball
 	public bool fail_ball;
@@ -121,7 +121,7 @@ public class HandController : MonoBehaviour
 
 		// catch ball
 		catch_ball = false;
-		add_score = false;
+		//add_score = false;
 		score = 0;
 		scoreText.text = string.Format("Score: {0}", score);
 
@@ -479,81 +479,79 @@ public class HandController : MonoBehaviour
 		{
 			isCatching = true;
 
-			// create catch ball and add score
-			if (add_score)
-			{
-				catching_thumb_flex = thumb_flex;
-				catching_index_finger_flex = index_finger_flex;
-				catching_middle_finger_flex = middle_finger_flex;
-				catching_ring_finger_flex = ring_finger_flex;
-				catching_pinky_flex = pinky_flex;
+			catching_thumb_flex = thumb_flex;
+			catching_index_finger_flex = index_finger_flex;
+			catching_middle_finger_flex = middle_finger_flex;
+			catching_ring_finger_flex = ring_finger_flex;
+			catching_pinky_flex = pinky_flex;
 
-				// create catch ball
-				catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
-				//catch_ball_object.gameObject.SetActive(true);
+			// thumb
+			finger_degree = -50;
 
-				// add score and update UI
-				score = score + 10;
-				scoreText.text = string.Format("Score: {0}", score);
-				add_score = false;
-			}
+			thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
+			thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
+			thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
 
-			// when animation end
-			if (!isCatching)
-			{
-				catch_ball = false;
+			thumb_flex = finger_degree + 180;
 
-				// thumb
-				finger_degree = -50;
+			// index finger
+			finger_degree = -70;
 
-				thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
-				thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
-				thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
+			index_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			index_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			index_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
-				thumb_flex = finger_degree + 180;
+			index_finger_flex = finger_degree + 180;
 
-				// index finger
-				finger_degree = -70;
+			// middle finger & ring finger
+			finger_degree = -65;
 
-				index_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				index_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				index_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+			middle_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			middle_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			middle_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
-				index_finger_flex = finger_degree + 180;
+			middle_finger_flex = finger_degree + 180;
 
-				// middle finger & ring finger
-				finger_degree = -65;
+			ring_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			ring_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			ring_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
-				middle_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				middle_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				middle_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+			ring_finger_flex = finger_degree + 180;
 
-				middle_finger_flex = finger_degree + 180;
+			finger_degree = -55;
 
-				ring_finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				ring_finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				ring_finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+			// pinky
+			pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
 
-				ring_finger_flex = finger_degree + 180;
+			pinky_flex = finger_degree + 180;
 
-				finger_degree = -55;
+			// create catch ball
+			catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
 
-				// pinky
-				pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-				pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-				pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-				pinky_flex = finger_degree + 180;
-			}
+			// add score and update UI
+			score = score + 10;
+			scoreText.text = string.Format("Score: {0}", score);
+			// add_score = false;
+			catch_ball = false;
 		}
 
+		// catching ball
 		if (isCatching)
 		{
 			catch_ball_object.gameObject.SetActive(true);
 		}
 
-		if (!isCatching)
+		// check catching
+		if (isCatching
+			&& (thumb_flex - catching_thumb_flex) > 5
+			&& (index_finger_flex - catching_index_finger_flex) > 5
+			&& (middle_finger_flex - catching_middle_finger_flex) > 5
+			&& (ring_finger_flex - catching_ring_finger_flex) > 5
+			&& (pinky_flex - catching_pinky_flex) > 5)
 		{
+			isCatching = false;
 			catch_ball_object.gameObject.SetActive(false);
 		}
 		

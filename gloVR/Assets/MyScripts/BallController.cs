@@ -114,7 +114,7 @@ public class BallController : MonoBehaviour
 			targetPos = this.transform.position;
 
 			hand_Motion.catch_ball = true;
-			hand_Motion.add_score = true;
+			// hand_Motion.add_score = true;
 		}
 
 		// fail ball
