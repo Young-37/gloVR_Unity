@@ -133,14 +133,27 @@ public class SerialPortHandler : MonoBehaviour
 
     public void setServo(int level){
         int i=0;
+        string temp = servoControl;
         for(i=1;i<6;i++){
             char a = servoControl[i];
             a = (char)((int)a + level);
-            servoControl = servoControl.Insert(i,a.ToString());
-            servoControl = servoControl.Remove(i+1,1);
+            temp = servoControl.Insert(i,a.ToString());
+            temp = servoControl.Remove(i+1,1);
+            temp = temp + "e";
         }
 
+        Debug.Log(temp);
         Debug.Log(servoControl);
+        for(i=0;i<5;i++){
+            SendString(temp);
+        }
+    }
+
+    public void SendVibe(){
+        int i=0;
+        for(i=0;i<5;i++){
+            SendString("s2e");
+        }
     }
 
 }

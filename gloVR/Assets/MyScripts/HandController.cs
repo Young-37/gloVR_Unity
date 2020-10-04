@@ -477,6 +477,14 @@ public class HandController : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
+			try{
+				SPHandler.setServo(0);
+				SPHandler.SendVibe();
+			}
+			catch(Exception e){
+				Debug.Log(e);
+			}
+				
 			isCatching = true;
 
 			catching_thumb_flex = thumb_flex;
