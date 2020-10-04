@@ -69,17 +69,13 @@ public class HandController : MonoBehaviour
 
 	// catch ball
 	private GameObject catch_ball_object;
+	private GameObject catch_ball_copy;
 	public bool catch_ball;
 	// public bool add_score;
 	private int score;
 
 	// catching
 	public bool isCatching;
-	private int catching_thumb_flex;
-	private int catching_index_finger_flex;
-	private int catching_middle_finger_flex;
-	private int catching_ring_finger_flex;
-	private int catching_pinky_flex;
 
 	// fail ball
 	public bool fail_ball;
@@ -100,20 +96,20 @@ public class HandController : MonoBehaviour
     void Start()
 	{
         //get SPHandler
-		try{
-      		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    	}
-    	catch(Exception e){
-      		Debug.Log(e);
-    	}
-
-		//get UHandler
-    	try{
-      		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-    	}
-    	catch(Exception e){
-      		Debug.Log(e);
-    	}
+		// try{
+      	// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	// }
+    	// catch(Exception e){
+      	// 	Debug.Log(e);
+    	// }
+		// 
+		// //get UHandler
+    	// try{
+      	// 	UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    	// }
+    	// catch(Exception e){
+      	// 	Debug.Log(e);
+    	// }
 
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
@@ -130,11 +126,6 @@ public class HandController : MonoBehaviour
 
 		// catching
 		isCatching = false;
-		catching_thumb_flex = 0;
-		catching_index_finger_flex = 0;
-		catching_middle_finger_flex = 0;
-		catching_ring_finger_flex = 0;
-		catching_pinky_flex = 0;
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -233,16 +224,16 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
-
-		if(! isCatching){
-			RotateFinger(flexData);
-			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-		}
-		
-		if(UHandler.newData){
-			MoveHand();
-		}
+		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		// 
+		// if(! isCatching){
+		// 	RotateFinger(flexData);
+		// 	hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+		// }
+		// 
+		// if(UHandler.newData){
+		// 	MoveHand();
+		// }
 
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -487,12 +478,6 @@ public class HandController : MonoBehaviour
 				
 			isCatching = true;
 
-			catching_thumb_flex = thumb_flex;
-			catching_index_finger_flex = index_finger_flex;
-			catching_middle_finger_flex = middle_finger_flex;
-			catching_ring_finger_flex = ring_finger_flex;
-			catching_pinky_flex = pinky_flex;
-
 			// thumb
 			finger_degree = -50;
 
@@ -536,7 +521,10 @@ public class HandController : MonoBehaviour
 			pinky_flex = finger_degree + 180;
 
 			// create catch ball
-			catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			catch_ball_copy = Instantiate(catch_ball_object) as GameObject;
+			catch_ball_copy.transform.parent = this.transform;
+			catch_ball_copy.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			catch_ball_copy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
 			// add score and update UI
 			score = score + 10;
@@ -548,19 +536,19 @@ public class HandController : MonoBehaviour
 		// catching ball
 		if (isCatching)
 		{
-			catch_ball_object.gameObject.SetActive(true);
+			catch_ball_copy.gameObject.SetActive(true);
 		}
 
 		// check catching
 		if (isCatching
-			&& (thumb_flex - catching_thumb_flex) > 5
-			&& (index_finger_flex - catching_index_finger_flex) > 5
-			&& (middle_finger_flex - catching_middle_finger_flex) > 5
-			&& (ring_finger_flex - catching_ring_finger_flex) > 5
-			&& (pinky_flex - catching_pinky_flex) > 5)
+			&& thumb_flex > 140
+			&& index_finger_flex > 120
+			&& middle_finger_flex > 125
+			&& ring_finger_flex > 125
+			&& pinky_flex > 135)
 		{
 			isCatching = false;
-			catch_ball_object.gameObject.SetActive(false);
+			catch_ball_copy.gameObject.SetActive(false);
 		}
 		
 		// fail ball
