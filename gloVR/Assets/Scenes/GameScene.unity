@@ -7549,6 +7549,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428488570}
   m_Mesh: {fileID: 4300000, guid: 85710620bfaf81242ae16c1e6f93838b, type: 3}
+--- !u!1 &1493536857 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9079656035222095024, guid: c71554bc9deef794b905e239020aa5e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7010227507368041205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1493536862
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493536857}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1502821376
 GameObject:
   m_ObjectHideFlags: 0
@@ -8221,6 +8243,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 13.19
       objectReference: {fileID: 0}
+    - target: {fileID: 6498504, guid: 723b49c435c174c47b836889e1991453, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 9e87d44436843a54baebedd9b94775b7,
+        type: 2}
     - target: {fileID: 1000010047998412, guid: 723b49c435c174c47b836889e1991453, type: 3}
       propertyPath: m_Name
       value: BackFence
@@ -10869,6 +10896,22 @@ PrefabInstance:
       propertyPath: scoreText
       value: 
       objectReference: {fileID: 19941105}
+    - target: {fileID: 9079656034534049693, guid: c71554bc9deef794b905e239020aa5e6,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079656035222095026, guid: c71554bc9deef794b905e239020aa5e6,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079656035222095026, guid: c71554bc9deef794b905e239020aa5e6,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: df43a165bfba7b3488ecfd060bbb6e2a,
+        type: 2}
     - target: {fileID: 9080003605096640750, guid: c71554bc9deef794b905e239020aa5e6,
         type: 3}
       propertyPath: m_Name

@@ -71,14 +71,13 @@ public class HandController : MonoBehaviour
 	private GameObject catch_ball_object;
 	private GameObject catch_ball_copy;
 	public bool catch_ball;
-	// public bool add_score;
 	private int score;
 
 	// catching
 	public bool isCatching;
 
 	// fail ball
-	public bool fail_ball;
+	// public bool fail_ball;
 	public int fail_ball_num;
 
 	// baseball UI
@@ -117,11 +116,10 @@ public class HandController : MonoBehaviour
 
 		// catch ball
 		catch_ball = false;
-		//add_score = false;
 		score = 0;
 		scoreText.text = string.Format("Score: {0}", score);
 
-		fail_ball = false;
+		// fail_ball = false;
 		fail_ball_num = 0;
 
 		// catching
@@ -520,16 +518,19 @@ public class HandController : MonoBehaviour
 
 			pinky_flex = finger_degree + 180;
 
-			// create catch ball
+			// copy catch ball
 			catch_ball_copy = Instantiate(catch_ball_object) as GameObject;
+			// create catch ball as hand's child
 			catch_ball_copy.transform.parent = this.transform;
+			// set position
 			catch_ball_copy.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			// set scale
 			catch_ball_copy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
 			// add score and update UI
 			score = score + 10;
 			scoreText.text = string.Format("Score: {0}", score);
-			// add_score = false;
+
 			catch_ball = false;
 		}
 
@@ -548,7 +549,9 @@ public class HandController : MonoBehaviour
 			&& pinky_flex > 135)
 		{
 			isCatching = false;
-			catch_ball_copy.gameObject.SetActive(false);
+			// catch_ball_copy.gameObject.SetActive(false);
+			catch_ball_copy.transform.parent = null;
+			catch_ball_copy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
 		
 		// fail ball
