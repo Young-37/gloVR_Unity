@@ -75,7 +75,7 @@ public class BallController : MonoBehaviour
 			try{
 				SPHandler.setServo(level);
 			}
-			catch(Exception e){
+			catch(System.Exception e){
 				Debug.Log(e);
 			}
 
