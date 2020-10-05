@@ -134,16 +134,22 @@ public class SerialPortHandler : MonoBehaviour
     public void setServo(int level){
         int i=0;
         string temp = servoControl;
+
         for(i=1;i<6;i++){
             char a = servoControl[i];
             a = (char)((int)a + level);
-            temp = servoControl.Insert(i,a.ToString());
-            temp = servoControl.Remove(i+1,1);
-            temp = temp + "e";
-        }
 
-        Debug.Log(temp);
-        Debug.Log(servoControl);
+            if((int)a > 51){
+                print((int)a);
+                a = '3';
+            }
+
+            temp = temp.Insert(i,a.ToString());
+            temp = temp.Remove(i+1,1);
+        }
+        
+        print(temp);
+
         for(i=0;i<5;i++){
             SendString(temp);
         }
