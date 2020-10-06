@@ -21,6 +21,7 @@ public class HandController : MonoBehaviour
 	//data for openCV
 	float beforeXPos;
 	float beforeYPos;
+	float beforeZPos;
 
 
     private GameObject hand;
@@ -94,21 +95,23 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
-        //get SPHandler
-		// try{
-      	// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    	// }
-    	// catch(Exception e){
-      	// 	Debug.Log(e);
-    	// }
-		// 
-		// //get UHandler
-    	// try{
-      	// 	UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-    	// }
-    	// catch(Exception e){
-      	// 	Debug.Log(e);
-    	// }
+        // //get SPHandler
+		try{
+      		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
+		
+		//get UHandler
+    	try{
+			print("GET UHandler");
+      		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+			UHandler.InitUDP();
+    	}
+    	catch(Exception e){
+      		Debug.Log(e);
+    	}
 
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
@@ -222,16 +225,16 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
-		// 
-		// if(! isCatching){
-		// 	RotateFinger(flexData);
-		// 	hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-		// }
-		// 
-		// if(UHandler.newData){
-		// 	MoveHand();
-		// }
+		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		
+		if(! isCatching){
+			RotateFinger(flexData);
+			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+		}
+		
+		if(UHandler.newData){
+			MoveHand();
+		}
 
 		// change finger (thumb)
 		if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -727,37 +730,54 @@ public class HandController : MonoBehaviour
 
 	}
 
+	float changeValue = 2.5f;
+
 	void MoveHand(){
 		string text = UHandler.text;
 
 		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
     	int index1 = text.IndexOf(',');
-    	int index2 = text.Length - index1 - 1;
+        Debug.Log(index1);
+    	int index2 = text.IndexOf(',',index1+1);
+        Debug.Log(index2);
+        Debug.Log(text.Length);
+        
     	String string_xpos = text.Substring(0,index1);
-    	String string_ypos = text.Substring(index1+1,index2);
+    	String string_ypos = text.Substring(index1+1,index2 - index1 - 1);
+        String string_zpos = text.Substring(index2+1,text.Length - index2 - 1);
 
     	float xPos = float.Parse(string_xpos);
     	float yPos = float.Parse(string_ypos);
+        float zPos = float.Parse(string_zpos);
 
+		zPos = zPos * 0.0066f + 0.167f;
+		print("zPos : ");
+		print(zPos);
+
+        Debug.Log(xPos);
+        Debug.Log(yPos);
+        Debug.Log(zPos);
     	//filter1
     	xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
     	yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
+        zPos = (float)(zPos * 0.8 + beforeZPos * 0.2);
 
 		xPos = (1000-xPos) * 1.5f;
-		yPos = (900-yPos) * 1.25f;
+		yPos = 500-yPos;
 
 		//filter2
-    	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10) )
+    	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10))
     	{
 
-      		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
+      		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, zPos));
 
       		Debug.Log(mouseWorldPosition);
       		hand.transform.position = new Vector3(mouseWorldPosition.x,mouseWorldPosition.y,mouseWorldPosition.z);
 
       		beforeXPos = xPos;
       		beforeYPos = yPos;
+			beforeZPos = zPos;
     	}
 		
 		UHandler.newData = false;

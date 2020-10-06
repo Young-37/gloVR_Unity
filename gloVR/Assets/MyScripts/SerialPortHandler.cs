@@ -18,7 +18,7 @@ public class SerialPortHandler : MonoBehaviour
         //port open
         sp.ReadTimeout = 100;
         sp.Open();
-        print("Serial ports open");   
+        print("Serial ports open");
 
         servoControl = "";
     }

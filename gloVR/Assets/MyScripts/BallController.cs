@@ -71,7 +71,7 @@ public class BallController : MonoBehaviour
 		if (throwBall && !hand_Motion.isCatching)
 		{
 			level = Random.Range(0, 4);
-
+			Debug.Log(level);
 			try{
 				SPHandler.setServo(level);
 			}
