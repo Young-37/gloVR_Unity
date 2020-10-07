@@ -74,10 +74,10 @@ public class UDPHandler : MonoBehaviour
                 // print(">> " + text);
 
                 newData = true;
-                }
+            }
             catch(Exception e){
                 Debug.Log(e);
-                }
+            }
 
         }
     }

@@ -107,7 +107,6 @@ public class HandController : MonoBehaviour
     	try{
 			print("GET UHandler");
       		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-			UHandler.InitUDP();
     	}
     	catch(Exception e){
       		Debug.Log(e);
@@ -434,8 +433,10 @@ public class HandController : MonoBehaviour
 
 			// change mouse's screen coordinate to world coordinate
 			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+			Debug.Log("클릭시 : ");
 			print(Input.mousePosition.x);
 			print(Input.mousePosition.y);
+			print(handScreenPosition.z);
 			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
 			//mouseWorldPosition.y = mouseWorldPosition.y;
 		}
@@ -738,39 +739,42 @@ public class HandController : MonoBehaviour
 		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
     	int index1 = text.IndexOf(',');
-        Debug.Log(index1);
     	int index2 = text.IndexOf(',',index1+1);
-        Debug.Log(index2);
-        Debug.Log(text.Length);
         
     	String string_xpos = text.Substring(0,index1);
     	String string_ypos = text.Substring(index1+1,index2 - index1 - 1);
         String string_zpos = text.Substring(index2+1,text.Length - index2 - 1);
 
+		Debug.Log(string_xpos);
+		Debug.Log(string_ypos);
+		Debug.Log(string_zpos);
+
     	float xPos = float.Parse(string_xpos);
     	float yPos = float.Parse(string_ypos);
         float zPos = float.Parse(string_zpos);
 
-		zPos = zPos * 0.0066f + 0.167f;
-		print("zPos : ");
-		print(zPos);
-
-        Debug.Log(xPos);
-        Debug.Log(yPos);
-        Debug.Log(zPos);
     	//filter1
     	xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
     	yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
         zPos = (float)(zPos * 0.8 + beforeZPos * 0.2);
 
-		xPos = (1000-xPos) * 1.5f;
-		yPos = 500-yPos;
+		// xPos = 1400 - (xPos * 2.222f);
+		// yPos = 700 - (yPos * 1.489f);
+		// 정계산
+
+		xPos = 1800 - (xPos * 2.857f);
+		yPos = 900 - (yPos * 1.914f);
+		zPos = zPos * 0.0032f + 1.5f;
 
 		//filter2
     	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10))
     	{
 
       		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, zPos));
+			
+			Debug.Log(xPos);
+        	Debug.Log(yPos);
+        	Debug.Log(zPos);
 
       		Debug.Log(mouseWorldPosition);
       		hand.transform.position = new Vector3(mouseWorldPosition.x,mouseWorldPosition.y,mouseWorldPosition.z);
