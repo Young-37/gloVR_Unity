@@ -18,9 +18,15 @@ public class SerialPortHandler : MonoBehaviour
         //port open
         sp.ReadTimeout = 100;
         sp.Open();
-        print("Serial ports open");   
+        print("Serial ports open");
 
         servoControl = "";
+    }
+
+    void End()
+    {
+      sp.close();
+      print("Serial Ports close");
     }
 
     // Update is called once per frame
@@ -28,7 +34,7 @@ public class SerialPortHandler : MonoBehaviour
     // {
     //     if(!sp.IsOpen){
 	// 		Debug.Log("port close");
-	// 	}    
+	// 	}
     // }
 
     public bool SendString(string string_data){
@@ -61,9 +67,9 @@ public class SerialPortHandler : MonoBehaviour
 
     public bool IsConnected(){
         int b = 0;
-        
+
         if(sp.IsOpen){
-            try{                
+            try{
                 b = sp.ReadByte();
             }
             catch(System.Exception e){
@@ -106,7 +112,7 @@ public class SerialPortHandler : MonoBehaviour
                 receiveData1 = sp.ReadLine();
                 receiveData2 = sp.ReadLine();
                 receiveData3 = sp.ReadLine();
-                
+
                 end_byte = sp.ReadByte();
             }
 
@@ -175,7 +181,7 @@ public class SerialPortHandler : MonoBehaviour
 //     {
 //         //---------------------------byte로 주고받는거 첫번째 시도--------------------------------------------
 // 		// int readNum = 0;
-// 		// // hand ratate 
+// 		// // hand ratate
 // 		// if(sp.IsOpen){
 // 		// 	try{
 // 		// 		readNum = sp.Read(recvArr,0,numData);

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class HandController : MonoBehaviour
 {
     //Serial Port Handler
-    private SerialPortHandler SPHandler;
+    //private SerialPortHandler SPHandler;
 
 	//Udp Socket Handler
 	private UDPHandler UHandler;
@@ -100,12 +100,12 @@ public class HandController : MonoBehaviour
     void Start()
 	{
         //get SPHandler
-		try{
+		/*try{
       		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
     	}
     	catch(Exception e){
       		Debug.Log(e);
-    	}
+    	}*/
 
 		//get UHandler
     	try{
@@ -226,20 +226,20 @@ public class HandController : MonoBehaviour
 		pinky_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-        
+
 	}
 
 //--------------------------------------------------------------------update--------------------------------------------------------------------------------
     // Update is called once per frame
 	void Update()
 	{
-		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		//SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 
 		if(! isCatching){
 			RotateFinger(flexData);
 			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
 		}
-		
+
 		if(UHandler.newData){
 			MoveHand();
 		}
@@ -554,7 +554,7 @@ public class HandController : MonoBehaviour
 			isCatching = false;
 			catch_ball_object.gameObject.SetActive(false);
 		}
-		
+
 		// fail ball
 		// if (fail_ball)
 		// {
@@ -565,33 +565,33 @@ public class HandController : MonoBehaviour
 		// 		anim.Play("no");
 		// 		play_anim = false;
 		// 	}
-		// 
+		//
 		// 	timer += Time.deltaTime;
-		// 
+		//
 		// 	// when animation end
 		// 	if (timer > 1.6f)
 		// 	{
 		// 		fail_ball = false;
-		// 
+		//
 		// 		timer = 0.0f;
-		// 
+		//
 		// 		// set finger as flex value
 		// 		thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-(thumb_flex - 180) - 160) / 5), -25.86f);
 		// 		thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -(thumb_flex - 180)) * 0.5f;
 		// 		thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -(thumb_flex - 180)) * 0.3f;
-		// 
+		//
 		// 		index_finger_1.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.5f;
 		// 		index_finger_2.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.8f;
 		// 		index_finger_3.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.3f;
-		// 
+		//
 		// 		middle_finger_1.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.5f;
 		// 		middle_finger_2.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.8f;
 		// 		middle_finger_3.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.3f;
-		// 
+		//
 		// 		ring_finger_1.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.5f;
 		// 		ring_finger_2.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.8f;
 		// 		ring_finger_3.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.3f;
-		// 
+		//
 		// 		pinky_1.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.5f;
 		// 		pinky_2.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
 		// 		pinky_3.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
@@ -707,15 +707,15 @@ public class HandController : MonoBehaviour
 		index_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
 		index_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
 		index_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
-		
+
 		middle_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.5f;
 		middle_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.8f;
 		middle_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.3f;
-		
+
 		ring_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
 		ring_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
 		ring_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
-		
+
 		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
 		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
 		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
@@ -760,7 +760,7 @@ public class HandController : MonoBehaviour
       		beforeXPos = xPos;
       		beforeYPos = yPos;
     	}
-		
+
 		UHandler.newData = false;
 	}
 }
