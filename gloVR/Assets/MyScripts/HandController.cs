@@ -95,32 +95,14 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
-<<<<<<< HEAD
-        //get SPHandler
-<<<<<<< HEAD
-		/*try{
-=======
         // //get SPHandler
 		try{
->>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
-=======
-		try{
->>>>>>> parent of dea38f7... .
       		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
     	}
     	catch(Exception e){
       		Debug.Log(e);
-<<<<<<< HEAD
-<<<<<<< HEAD
-    	}*/
-=======
-    	}
->>>>>>> parent of dea38f7... .
-
-=======
     	}
 		
->>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 		//get UHandler
     	try{
 			print("GET UHandler");
@@ -242,214 +224,30 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-		//SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
-=======
-		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
->>>>>>> parent of dea38f7... .
-
-=======
 		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 		
->>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 		if(! isCatching){
 			RotateFinger(flexData);
-			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
+			// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
+
+
+			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
+			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
+
+			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+
+			Debug.Log("Receive serial data");
+		}
+
+		if(isCatching){
+			setFingerValue(flexData);
 		}
 		
 		if(UHandler.newData){
 			MoveHand();
-		}
-
-		// change finger (thumb)
-		if (Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			finger_flex = thumb_flex;
-			finger_1 = thumb_0;
-			finger_2 = thumb_1;
-			finger_3 = thumb_2;
-		}
-		// change finger (index finger)
-		if (Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			finger_flex = index_finger_flex;
-			finger_1 = index_finger_1;
-			finger_2 = index_finger_2;
-			finger_3 = index_finger_3;
-		}
-		// change finger (middle finger)
-		if (Input.GetKeyDown(KeyCode.Alpha3))
-		{
-			finger_flex = middle_finger_flex;
-			finger_1 = middle_finger_1;
-			finger_2 = middle_finger_2;
-			finger_3 = middle_finger_3;
-		}
-		// change finger (ring finger)
-		if (Input.GetKeyDown(KeyCode.Alpha4))
-		{
-			finger_flex = ring_finger_flex;
-			finger_1 = ring_finger_1;
-			finger_2 = ring_finger_2;
-			finger_3 = ring_finger_3;
-		}
-		// change finger (pinky)
-		if (Input.GetKeyDown(KeyCode.Alpha5))
-		{
-			finger_flex = pinky_flex;
-			finger_1 = pinky_1;
-			finger_2 = pinky_2;
-			finger_3 = pinky_3;
-		}
-
-		//Vector3 angle = Quaternion.Euler(0f, 3f, 0f);
-		if (Input.GetKey(KeyCode.UpArrow) && finger_1 != thumb_1)
-		{
-			// increase value
-			finger_flex += 1;
-			if (finger_flex > 180)
-			{
-				finger_flex = 180;
-			}
-
-			// set finger degree using flex value
-			finger_degree = finger_flex - 180;
-
-			if (finger_degree > 0)
-			{
-				finger_degree = 0;
-			}
-
-			// rotate finger
-			finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-			finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-			finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-			// update finger flex value
-			if (finger_1 == index_finger_1)
-			{
-				index_finger_flex = finger_flex;
-			}
-			if (finger_1 == middle_finger_1)
-			{
-				middle_finger_flex = finger_flex;
-			}
-			if (finger_1 == ring_finger_1)
-			{
-				ring_finger_flex = finger_flex;
-			}
-			if (finger_1 == pinky_1)
-			{
-				pinky_flex = finger_flex;
-			}
-
-			// print rotation value
-			Debug.Log(finger_flex);
-			Debug.Log("--------------------------------------------------");
-		}
-		if (Input.GetKey(KeyCode.DownArrow) && finger_1 != thumb_1)
-		{
-			// decrease value
-			finger_flex -= 1;
-
-			if (finger_flex < 50)
-			{
-				finger_flex = 50;
-			}
-
-			// set finger degree using flex value
-			finger_degree = finger_flex - 180;
-
-			if (finger_degree < -130)
-			{
-				finger_degree = -130;
-			}
-
-			// rotate finger
-			finger_1.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-			finger_2.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-			finger_3.transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-
-			// update finger flex value
-			if (finger_1 == index_finger_1)
-			{
-				index_finger_flex = finger_flex;
-			}
-			if (finger_1 == middle_finger_1)
-			{
-				middle_finger_flex = finger_flex;
-			}
-			if (finger_1 == ring_finger_1)
-			{
-				ring_finger_flex = finger_flex;
-			}
-			if (finger_1 == pinky_1)
-			{
-				pinky_flex = finger_flex;
-			}
-
-			// print rotation value
-			Debug.Log(finger_flex);
-			Debug.Log("--------------------------------------------------");
-		}
-
-		if (Input.GetKey(KeyCode.UpArrow) && finger_1 == thumb_0)
-		{
-			// increase value
-			finger_flex += 1;
-
-			if (finger_flex > 180)
-			{
-				finger_flex = 180;
-			}
-
-			// set finger degree using flex value
-			finger_degree = finger_flex - 180;
-
-			if (finger_degree > 0)
-			{
-				finger_degree = 0;
-			}
-
-			finger_1.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
-			finger_2.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
-			finger_3.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
-
-			thumb_flex = finger_flex;
-
-			// print rotation value
-			Debug.Log(finger_flex);
-			Debug.Log("--------------------------------------------------");
-		}
-		if (Input.GetKey(KeyCode.DownArrow) && finger_1 == thumb_0)
-		{
-			// decrease value
-			finger_flex -= 1;
-
-			if (finger_flex < 50)
-			{
-				finger_flex = 50;
-			}
-
-			// set finger degree using flex value
-			finger_degree = finger_flex - 180;
-
-			if (finger_degree < -130)
-			{
-				finger_degree = -130;
-			}
-
-			// rotate finger (change x value)
-			finger_1.transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
-			finger_2.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
-			finger_3.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
-
-			thumb_flex = finger_flex;
-
-			// print rotation value
-			Debug.Log(finger_flex);
-			Debug.Log("--------------------------------------------------");
+			Debug.Log("Receive UDP data");
 		}
 
 		// when mouse button down
@@ -472,26 +270,6 @@ public class HandController : MonoBehaviour
 		if (hand.transform.position != mouseWorldPosition)
 		{
 			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
-		}
-
-		// rotate hand
-		// Roll (x)
-		if (Input.GetKey(KeyCode.R))
-		{
-			speed = 5f;
-			hand.transform.Rotate(new Vector3(speed, 0, 0), Space.World);
-		}
-		// Pitch (y)
-		if (Input.GetKey(KeyCode.P))
-		{
-			speed = 5f;
-			hand.transform.Rotate(new Vector3(0, speed, 0), Space.World);
-		}
-		// Yaw (z)
-		if (Input.GetKey(KeyCode.Y))
-		{
-			speed = 5f;
-			hand.transform.Rotate(new Vector3(0, 0, speed), Space.World);
 		}
 
 		// catch ball
@@ -730,25 +508,25 @@ public class HandController : MonoBehaviour
 			rotate_degree[i] = intDataArr[i] - 180;
 		}
 
-        thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-rotate_degree[0] - 160) / 5), -25.86f);
-		thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -rotate_degree[0]) * 0.5f;
-		thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -rotate_degree[0]) * 0.3f;
+        thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-rotate_degree[4] - 160) / 5), -25.86f);
+		thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -rotate_degree[4]) * 0.5f;
+		thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -rotate_degree[4]) * 0.3f;
 
-		index_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
-		index_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
-		index_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
+		index_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
+		index_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
+		index_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
 		
 		middle_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.5f;
 		middle_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.8f;
 		middle_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.3f;
 		
-		ring_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
-		ring_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
-		ring_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
+		ring_finger_1.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
+		ring_finger_2.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
+		ring_finger_3.transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
 		
-		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
-		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
-		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
+		pinky_1.transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.5f;
+		pinky_2.transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.8f;
+		pinky_3.transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.3f;
 
 		thumb_flex = intDataArr[0];
 		index_finger_flex = intDataArr[1];
@@ -756,6 +534,14 @@ public class HandController : MonoBehaviour
 		ring_finger_flex = intDataArr[3];
 		pinky_flex = intDataArr[4];
 
+	}
+
+	void setFingerValue(int[] intDataArr){
+		thumb_flex = intDataArr[0];
+		index_finger_flex = intDataArr[1];
+		middle_finger_flex = intDataArr[2];
+		ring_finger_flex = intDataArr[3];
+		pinky_flex = intDataArr[4];
 	}
 
 	float changeValue = 2.5f;

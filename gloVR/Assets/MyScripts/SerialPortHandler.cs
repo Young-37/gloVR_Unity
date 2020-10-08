@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
@@ -18,31 +19,11 @@ public class SerialPortHandler : MonoBehaviour
         //port open
         sp.ReadTimeout = 100;
         sp.Open();
-        print("Serial ports open");   
+        print("Serial ports open");
 
         servoControl = "s00000e";
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    void End()
-    {
-      sp.close();
-      print("Serial Ports close");
-    }
-
-=======
->>>>>>> parent of dea38f7... .
-    // Update is called once per frame
-    // void Update()
-    // {
-    //     if(!sp.IsOpen){
-	// 		Debug.Log("port close");
-	// 	}    
-    // }
-
-=======
->>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
     public bool SendString(string string_data){
 
         if(sp.IsOpen){
@@ -132,57 +113,6 @@ public class SerialPortHandler : MonoBehaviour
         for(i=1;i<6;i++){
             char a = servoControl[i];
             a = (char)((int)a + level);
-<<<<<<< HEAD
-            servoControl = servoControl.Insert(i,a.ToString());
-            servoControl = servoControl.Remove(i+1,1);
-        }
-
-        Debug.Log(servoControl);
-    }
-
-}
-
-
-// public class receiveData : MonoBehaviour
-// {
-//     SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
-
-//     string receiveData1;
-// 	string receiveData2;
-// 	string receiveData3;
-
-//     float yaw;
-//     float roll;
-//     float pitch;
-
-//     public GameObject hand;
-//     // handMotion = hand.GetComponent<hand_motion>();
-
-//     // Start is called before the first frame update
-//     void Start()
-//     {
-//         //port open
-//         sp.ReadTimeout = 50;
-//         sp.Open();
-//         print("Serial ports open");
-//     }
-
-//     // Update is called once per frame
-//     void Update()
-//     {
-//         //---------------------------byte로 주고받는거 첫번째 시도--------------------------------------------
-// 		// int readNum = 0;
-// 		// // hand ratate 
-// 		// if(sp.IsOpen){
-// 		// 	try{
-// 		// 		readNum = sp.Read(recvArr,0,numData);
-// 		// 	}
-// 		// 	catch(System.Exception e){
-// 		// 		Debug.Log(e);
-// 		// 	}
-// 		// }
-=======
->>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 
             if((int)a > 51){
                 print((int)a);
