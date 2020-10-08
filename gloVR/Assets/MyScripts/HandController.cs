@@ -98,6 +98,7 @@ public class HandController : MonoBehaviour
         // //get SPHandler
 		try{
       		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+			SPHandler.DiscardBuffer();
     	}
     	catch(Exception e){
       		Debug.Log(e);
