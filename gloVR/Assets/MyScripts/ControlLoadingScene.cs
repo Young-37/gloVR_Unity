@@ -10,10 +10,10 @@ public class ControlLoadingScene : MonoBehaviour
   public Slider progressBar;
   public float max;
 
-  //private SerialPortHandler SPHandler;
+  private SerialPortHandler SPHandler;
   private UDPHandler UHandler;
   string start_string = "s1e";
-
+  
   float timer;
   float waiting_time;
 
@@ -24,12 +24,12 @@ public class ControlLoadingScene : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    /*try{
+    try{
       SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
     }
     catch(Exception e){
       Debug.Log(e);
-    }*/
+    }
 
     try{
       UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
@@ -41,7 +41,7 @@ public class ControlLoadingScene : MonoBehaviour
     UHandler.InitUDP();
     sp = false;
     up = false;
-
+    
     max = progressBar.maxValue;
 
     timer = 0;
@@ -53,16 +53,16 @@ public class ControlLoadingScene : MonoBehaviour
   void Update()
   {
     timer += Time.deltaTime;
-
+  
     if(timer > waiting_time)
     {
       //serial port로 데이터 보내기
-      /*try{
+      try{
         SPHandler.SendString(start_string);
       }
       catch(Exception e){
         Debug.Log(e);
-      }*/
+      }
 
       //udp로 데이터 보내기
       try{
@@ -74,14 +74,14 @@ public class ControlLoadingScene : MonoBehaviour
 
 
       //Serial으로 데이터 받기
-      /*if(SPHandler.IsConnected() && !sp){
+      if(SPHandler.IsConnected() && !sp){
         progressBar.value += (float)0.5;
         sp = true;
-      }*/
+      }
 
       //udp로 데이터 받기
       if(UHandler.newData && !up){
-        progressBar.value = max;
+        progressBar.value += (float)0.5;
         up = true;
       }
 
@@ -89,7 +89,7 @@ public class ControlLoadingScene : MonoBehaviour
       {
         SceneManager.LoadScene("GameScene");
       }
-
+      
       timer = 0;
     }
 
