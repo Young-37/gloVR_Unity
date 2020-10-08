@@ -71,7 +71,6 @@ public class UDPHandler : MonoBehaviour
                 byte[] data = udpClient2.Receive(ref anyIP);
 
                 text = Encoding.UTF8.GetString(data);
-                // print(">> " + text);
 
                 newData = true;
             }

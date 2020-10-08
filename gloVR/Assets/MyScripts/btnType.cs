@@ -85,7 +85,6 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         string sendData = "s";
 
         foreach(var dropdown in dropdowns){
-            print(dropdown.value);
             sendData = sendData.Insert(sendData.Length,dropdown.value.ToString());
         }
 

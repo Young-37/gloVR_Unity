@@ -23,7 +23,6 @@ public class HandController : MonoBehaviour
 	float beforeYPos;
 	float beforeZPos;
 
-
     private GameObject hand;
 	private float speed = 5f;
 
@@ -230,47 +229,19 @@ public class HandController : MonoBehaviour
 		if(! isCatching){
 			RotateFinger(flexData);
 			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
-
-
-			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
-
-			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
 
 			Debug.Log("Receive serial data");
 		}
-
-		if(isCatching){
+		else{
 			setFingerValue(flexData);
+			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
+			
+			Debug.Log("Receive serial data");
 		}
 		
 		if(UHandler.newData){
 			MoveHand();
 			Debug.Log("Receive UDP data");
-		}
-
-		// when mouse button down
-		if (Input.GetMouseButtonUp(0))
-		{
-			// change hand's world coordinate to screen coordinate (to get z(depth) value)
-			Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
-
-			// change mouse's screen coordinate to world coordinate
-			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
-			Debug.Log("클릭시 : ");
-			print(Input.mousePosition.x);
-			print(Input.mousePosition.y);
-			print(handScreenPosition.z);
-			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
-			//mouseWorldPosition.y = mouseWorldPosition.y;
-		}
-
-		// move hand
-		if (hand.transform.position != mouseWorldPosition)
-		{
-			hand.transform.position = Vector3.MoveTowards(hand.transform.position, mouseWorldPosition, speed * Time.deltaTime);
 		}
 
 		// catch ball
@@ -359,53 +330,10 @@ public class HandController : MonoBehaviour
 			&& pinky_flex > 135)
 		{
 			isCatching = false;
-			// catch_ball_copy.gameObject.SetActive(false);
 			catch_ball_copy.transform.parent = null;
 			catch_ball_copy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
-		
-		// fail ball
-		// if (fail_ball)
-		// {
-		// 	// play animation
-		// 	if (play_anim)
-		// 	{
-		// 		// play animation
-		// 		anim.Play("no");
-		// 		play_anim = false;
-		// 	}
-		// 
-		// 	timer += Time.deltaTime;
-		// 
-		// 	// when animation end
-		// 	if (timer > 1.6f)
-		// 	{
-		// 		fail_ball = false;
-		// 
-		// 		timer = 0.0f;
-		// 
-		// 		// set finger as flex value
-		// 		thumb_0.transform.localEulerAngles = new Vector3(-28.32f, ((-(thumb_flex - 180) - 160) / 5), -25.86f);
-		// 		thumb_1.transform.localEulerAngles = new Vector3(2.37f, -0.297f, -(thumb_flex - 180)) * 0.5f;
-		// 		thumb_2.transform.localEulerAngles = new Vector3(1.36f, -0.126f, -(thumb_flex - 180)) * 0.3f;
-		// 
-		// 		index_finger_1.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.5f;
-		// 		index_finger_2.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.8f;
-		// 		index_finger_3.transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		middle_finger_1.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.5f;
-		// 		middle_finger_2.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.8f;
-		// 		middle_finger_3.transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		ring_finger_1.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.5f;
-		// 		ring_finger_2.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.8f;
-		// 		ring_finger_3.transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		pinky_1.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.5f;
-		// 		pinky_2.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
-		// 		pinky_3.transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
-		// 	}
-		// }
+	
 
 		// exit game
 		if (fail_ball_num > 2)
@@ -544,8 +472,6 @@ public class HandController : MonoBehaviour
 		ring_finger_flex = intDataArr[3];
 		pinky_flex = intDataArr[4];
 	}
-
-	float changeValue = 2.5f;
 
 	void MoveHand(){
 		string text = UHandler.text;
