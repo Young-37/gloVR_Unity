@@ -93,7 +93,13 @@ public class btnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //SPHandler.servoControl = sendData;
       //  print(SPHandler.servoControl);
 
+<<<<<<< HEAD
       //  SPHandler.SendString(sendData);
+=======
+        SPHandler.SendString(sendData);
+        Debug.Log("Send Data : ");
+        Debug.Log(sendData);
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 
     }
 }

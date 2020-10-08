@@ -21,6 +21,7 @@ public class HandController : MonoBehaviour
 	//data for openCV
 	float beforeXPos;
 	float beforeYPos;
+	float beforeZPos;
 
 
     private GameObject hand;
@@ -69,20 +70,15 @@ public class HandController : MonoBehaviour
 
 	// catch ball
 	private GameObject catch_ball_object;
+	private GameObject catch_ball_copy;
 	public bool catch_ball;
-	// public bool add_score;
 	private int score;
 
 	// catching
 	public bool isCatching;
-	private int catching_thumb_flex;
-	private int catching_index_finger_flex;
-	private int catching_middle_finger_flex;
-	private int catching_ring_finger_flex;
-	private int catching_pinky_flex;
 
 	// fail ball
-	public bool fail_ball;
+	// public bool fail_ball;
 	public int fail_ball_num;
 
 	// baseball UI
@@ -99,16 +95,27 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
+<<<<<<< HEAD
         //get SPHandler
 		/*try{
+=======
+        // //get SPHandler
+		try{
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
       		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
     	}
     	catch(Exception e){
       		Debug.Log(e);
+<<<<<<< HEAD
     	}*/
 
+=======
+    	}
+		
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 		//get UHandler
     	try{
+			print("GET UHandler");
       		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
     	}
     	catch(Exception e){
@@ -121,20 +128,14 @@ public class HandController : MonoBehaviour
 
 		// catch ball
 		catch_ball = false;
-		//add_score = false;
 		score = 0;
 		scoreText.text = string.Format("Score: {0}", score);
 
-		fail_ball = false;
+		// fail_ball = false;
 		fail_ball_num = 0;
 
 		// catching
 		isCatching = false;
-		catching_thumb_flex = 0;
-		catching_index_finger_flex = 0;
-		catching_middle_finger_flex = 0;
-		catching_ring_finger_flex = 0;
-		catching_pinky_flex = 0;
 
 		// read all Children of current object
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -233,8 +234,13 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
+<<<<<<< HEAD
 		//SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 
+=======
+		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 		if(! isCatching){
 			RotateFinger(flexData);
 			hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
@@ -442,8 +448,10 @@ public class HandController : MonoBehaviour
 
 			// change mouse's screen coordinate to world coordinate
 			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+			Debug.Log("클릭시 : ");
 			print(Input.mousePosition.x);
 			print(Input.mousePosition.y);
+			print(handScreenPosition.z);
 			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
 			//mouseWorldPosition.y = mouseWorldPosition.y;
 		}
@@ -477,13 +485,15 @@ public class HandController : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
+			try{
+				SPHandler.setServo(0);
+				SPHandler.SendVibe();
+			}
+			catch(Exception e){
+				Debug.Log(e);
+			}
+				
 			isCatching = true;
-
-			catching_thumb_flex = thumb_flex;
-			catching_index_finger_flex = index_finger_flex;
-			catching_middle_finger_flex = middle_finger_flex;
-			catching_ring_finger_flex = ring_finger_flex;
-			catching_pinky_flex = pinky_flex;
 
 			// thumb
 			finger_degree = -50;
@@ -527,32 +537,40 @@ public class HandController : MonoBehaviour
 
 			pinky_flex = finger_degree + 180;
 
-			// create catch ball
-			catch_ball_object.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			// copy catch ball
+			catch_ball_copy = Instantiate(catch_ball_object) as GameObject;
+			// create catch ball as hand's child
+			catch_ball_copy.transform.parent = this.transform;
+			// set position
+			catch_ball_copy.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			// set scale
+			catch_ball_copy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
 			// add score and update UI
 			score = score + 10;
 			scoreText.text = string.Format("Score: {0}", score);
-			// add_score = false;
+
 			catch_ball = false;
 		}
 
 		// catching ball
 		if (isCatching)
 		{
-			catch_ball_object.gameObject.SetActive(true);
+			catch_ball_copy.gameObject.SetActive(true);
 		}
 
 		// check catching
 		if (isCatching
-			&& (thumb_flex - catching_thumb_flex) > 5
-			&& (index_finger_flex - catching_index_finger_flex) > 5
-			&& (middle_finger_flex - catching_middle_finger_flex) > 5
-			&& (ring_finger_flex - catching_ring_finger_flex) > 5
-			&& (pinky_flex - catching_pinky_flex) > 5)
+			&& thumb_flex > 140
+			&& index_finger_flex > 120
+			&& middle_finger_flex > 125
+			&& ring_finger_flex > 125
+			&& pinky_flex > 135)
 		{
 			isCatching = false;
-			catch_ball_object.gameObject.SetActive(false);
+			// catch_ball_copy.gameObject.SetActive(false);
+			catch_ball_copy.transform.parent = null;
+			catch_ball_copy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
 
 		// fail ball
@@ -728,37 +746,57 @@ public class HandController : MonoBehaviour
 
 	}
 
+	float changeValue = 2.5f;
+
 	void MoveHand(){
 		string text = UHandler.text;
 
 		Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(hand.transform.position);
 
     	int index1 = text.IndexOf(',');
-    	int index2 = text.Length - index1 - 1;
+    	int index2 = text.IndexOf(',',index1+1);
+        
     	String string_xpos = text.Substring(0,index1);
-    	String string_ypos = text.Substring(index1+1,index2);
+    	String string_ypos = text.Substring(index1+1,index2 - index1 - 1);
+        String string_zpos = text.Substring(index2+1,text.Length - index2 - 1);
+
+		Debug.Log(string_xpos);
+		Debug.Log(string_ypos);
+		Debug.Log(string_zpos);
 
     	float xPos = float.Parse(string_xpos);
     	float yPos = float.Parse(string_ypos);
+        float zPos = float.Parse(string_zpos);
 
     	//filter1
     	xPos = (float)(xPos * 0.8 + beforeXPos * 0.2);
     	yPos = (float)(yPos * 0.8 + beforeYPos * 0.2);
+        zPos = (float)(zPos * 0.8 + beforeZPos * 0.2);
 
-		xPos = (1000-xPos) * 1.5f;
-		yPos = (900-yPos) * 1.25f;
+		// xPos = 1400 - (xPos * 2.222f);
+		// yPos = 700 - (yPos * 1.489f);
+		// 정계산
+
+		xPos = 1800 - (xPos * 2.857f);
+		yPos = 900 - (yPos * 1.914f);
+		zPos = zPos * 0.0032f + 1.5f;
 
 		//filter2
-    	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10) )
+    	if( ((beforeXPos - xPos) * (beforeXPos - xPos) > 10) || ((beforeYPos - yPos) * (beforeYPos - yPos) > 10))
     	{
 
-      		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, handScreenPosition.z));
+      		mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, zPos));
+			
+			Debug.Log(xPos);
+        	Debug.Log(yPos);
+        	Debug.Log(zPos);
 
       		Debug.Log(mouseWorldPosition);
       		hand.transform.position = new Vector3(mouseWorldPosition.x,mouseWorldPosition.y,mouseWorldPosition.z);
 
       		beforeXPos = xPos;
       		beforeYPos = yPos;
+			beforeZPos = zPos;
     	}
 
 		UHandler.newData = false;

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
+	private SerialPortHandler SPHandler;
+	
 	// hand
 	private GameObject hand;
 
@@ -28,6 +30,13 @@ public class BallController : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
+
+		try{
+     		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	}
+    	catch(System.Exception e){
+      		Debug.Log(e);
+    	}
 		// find Hand object
 		hand = GameObject.Find("Hand");
 
@@ -62,6 +71,13 @@ public class BallController : MonoBehaviour
 		if (throwBall && !hand_Motion.isCatching)
 		{
 			level = Random.Range(0, 4);
+			Debug.Log(level);
+			try{
+				SPHandler.setServo(level);
+			}
+			catch(System.Exception e){
+				Debug.Log(e);
+			}
 
 			// put ball at start point
 			this.gameObject.SetActive(true);

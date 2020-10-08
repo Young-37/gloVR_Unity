@@ -20,9 +20,10 @@ public class SerialPortHandler : MonoBehaviour
         sp.Open();
         print("Serial ports open");
 
-        servoControl = "";
+        servoControl = "s00000e";
     }
 
+<<<<<<< HEAD
     void End()
     {
       sp.close();
@@ -37,8 +38,10 @@ public class SerialPortHandler : MonoBehaviour
 	// 	}
     // }
 
+=======
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
     public bool SendString(string string_data){
-        //문자열 검사하는 코드 작성할건지?
+
         if(sp.IsOpen){
             sp.Write(string_data);
             return true;
@@ -48,22 +51,6 @@ public class SerialPortHandler : MonoBehaviour
             return false;
         }
     }
-
-    // public string ReceiveString(){
-    //     if(sp.IsOpen){
-    //         try{
-    //             string recv_data = sp.ReadLine();
-    //             Debug.Log(recv_data);
-    //             return recv_data;
-    //         }
-    //         catch(System.Exception e){
-    //             Debug.Log(e);
-    //         }
-    //     }
-    //     else{
-    //         return "0";
-    //     }
-    // }
 
     public bool IsConnected(){
         int b = 0;
@@ -132,16 +119,17 @@ public class SerialPortHandler : MonoBehaviour
                 return true;
             }
         }
-
         return false;
-
     }
 
     public void setServo(int level){
         int i=0;
+        string temp = servoControl;
+
         for(i=1;i<6;i++){
             char a = servoControl[i];
             a = (char)((int)a + level);
+<<<<<<< HEAD
             servoControl = servoControl.Insert(i,a.ToString());
             servoControl = servoControl.Remove(i+1,1);
         }
@@ -190,89 +178,30 @@ public class SerialPortHandler : MonoBehaviour
 // 		// 		Debug.Log(e);
 // 		// 	}
 // 		// }
+=======
+>>>>>>> 3c1857222e70a69d716aeabfdef5521c93042a35
 
-// 		// if(readNum == 6){
-// 		// 	print("recvArr : " + recvArr[0] + " " + recvArr[1]+ " " + recvArr[2]+ " " + recvArr[3]+ " " + recvArr[4]+ " " + recvArr[5]);
-// 		// 	int[] intArr = byteArrToIntArr(recvArr);
-// 		// 	print("intArr : " + intArr[0] + " " + intArr[1]+ " " + intArr[2]+ " " + intArr[3]+ " " + intArr[4]+ " " + intArr[5]);
+            if((int)a > 51){
+                print((int)a);
+                a = '3';
+            }
 
-// 		// 	float yaw = intToFloat(intArr[0],intArr[1]);
-// 		// 	float roll = intToFloat(intArr[2],intArr[3]);
-// 		// 	float pitch = intToFloat(intArr[4],intArr[5]);
-// 		// 	print("yaw1 : " + (yaw) + " roll1 : " + (roll) + " pitch1 : " + (pitch));
+            temp = temp.Insert(i,a.ToString());
+            temp = temp.Remove(i+1,1);
+        }
+        
+        print(temp);
 
-// 		// 	yaw = (float)(yaw * 180 / 3.14);
-// 		// 	roll = (float)(roll * 180 / 3.14);
-// 		// 	pitch = (float)(pitch * 180 / 3.14);
-// 		// 	print("yaw : " + (yaw) + " roll : " + (roll) + " pitch : " + (pitch));
+        for(i=0;i<5;i++){
+            SendString(temp);
+        }
+    }
 
-// 		// 	hand.transform.rotation = Quaternion.Euler(yaw,roll,pitch);
-// 		// }
+    public void SendVibe(){
+        int i=0;
+        for(i=0;i<5;i++){
+            SendString("s2e");
+        }
+    }
 
-// 		//---------------------------byte로 주고받는거 두번째 시도--------------------------------------------
-// 		// if(sp.IsOpen){
-// 		// 	try{
-// 		// 		recvByteData = (byte)sp.ReadByte();
-// 		// 		// Debug.Log(recvByteData);
-// 		// 	}
-// 		// 	catch(System.Exception e){
-// 		// 		Debug.Log(e);
-// 		// 	}
-
-// 		// 	if(recvInProccess == true){
-// 		// 		if(recvByteData != 125){
-// 		// 			if(ndx >= numData){
-// 		// 				ndx = 0;
-// 		// 				recvInProccess = false;
-// 		// 			}
-// 		// 			else{
-// 		// 				recvArr[ndx] = recvByteData;
-// 		// 				ndx++;
-// 		// 			}
-// 		// 		}
-// 		// 		else{
-// 		// 			recvInProccess = false;
-// 		// 			ndx = 0;
-// 		// 			newData = true;
-// 		// 		}
-// 		// 	}
-// 		// 	else if(recvByteData == 123){
-// 		// 		recvInProccess = true;
-// 		// 	}
-// 		// }
-
-// 		// print(newData);
-
-
-// 		// if(newData == true){
-// 		// 	ShowData();
-// 		// }
-// 		//----------------------------------------------문자열로 주고받기-----------------------------------------
-// 		if(sp.IsOpen){
-// 			try{
-// 				receiveData1 = sp.ReadLine();
-// 				receiveData2 = sp.ReadLine();
-// 				receiveData3 = sp.ReadLine();
-// 			}
-// 			catch(System.Exception e){
-// 				Debug.Log(e);
-// 			}
-// 		}
-
-// 		Debug.Log("——————————");
-// 		Debug.Log(receiveData1);
-// 		Debug.Log(receiveData2);
-// 		Debug.Log(receiveData3);
-// 		Debug.Log("——————————");
-
-// 		float yaw = float.Parse(receiveData1);
-// 		float roll = float.Parse(receiveData2);
-// 		float pitch = float.Parse(receiveData3);
-
-// 		yaw = (float)(yaw * 180 / 3.14);
-// 		roll = (float)(roll * 180 / 3.14);
-// 		pitch = (float)(pitch * 180 / 3.14);
-
-// 		hand.transform.rotation = Quaternion.Euler(yaw,roll,pitch);
-//     }
-// }
+}

@@ -33,7 +33,6 @@ public class DropdownHandler : MonoBehaviour
 
     void DropdownItemSelected(Dropdown drd){
         int index = drd.value;
-        Debug.Log(drd.options[index].text);
     }
 
 }
