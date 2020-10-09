@@ -7,7 +7,6 @@ using System.IO.Ports;
 public class SerialPortHandler : MonoBehaviour
 {
     SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
-    SerialPort sp2 = new SerialPort("/dev/tty.SERV-DevB",9600);
 
     public string servoControl;
 
@@ -23,27 +22,16 @@ public class SerialPortHandler : MonoBehaviour
         print("Serial ports open");
 
         servoControl = "s00000e";
-
-        sp2.ReadTimeout = 100;
-        sp2.Open();
-        print("Serial port2 open");
     }
 
     public bool SendString(string string_data){
 
         if(sp.IsOpen){
             sp.Write(string_data);
-        }
-        else{
-            // throw Exception;
-            return false;
-        }
-
-        if(sp2.IsOpen){
-            sp2.Write(string_data);
             return true;
         }
         else{
+            // throw Exception;
             return false;
         }
     }

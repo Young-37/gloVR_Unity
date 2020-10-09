@@ -72,6 +72,7 @@ public class ControlLoadingScene : MonoBehaviour
         Debug.Log(e);
       }
 
+
       //Serial으로 데이터 받기
       if(SPHandler.IsConnected() && !sp){
         progressBar.value += (float)0.5;
