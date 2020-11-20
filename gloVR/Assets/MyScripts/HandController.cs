@@ -229,7 +229,21 @@ public class HandController : MonoBehaviour
 		
 		if(! isCatching){
 			RotateFinger(flexData);
+			print("=====flex========");
+			print(flexData[0]);
+			print(flexData[1]);
+			print(flexData[2]);
+			print(flexData[3]);
+			print(flexData[4]);
+			print("================");
+
 			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
+			print("-----------ypr---------------- ");
+			print(ypr[0]);
+			print(ypr[1]);
+			print(ypr[2]);
+			print("--------------------------- ");
+
 			// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
 
 
