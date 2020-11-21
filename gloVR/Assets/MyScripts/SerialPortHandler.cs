@@ -6,7 +6,8 @@ using System.IO.Ports;
 
 public class SerialPortHandler : MonoBehaviour
 {
-    SerialPort sp = new SerialPort("/dev/tty.PARK-DevB",9600);
+    SerialPort sp = new SerialPort("/dev/tty.MAIN-Port",9600);
+    SerialPort sp2 = new SerialPort("/dev/tty.SERV-DevB",9600);
 
     public string servoControl;
 
@@ -22,16 +23,27 @@ public class SerialPortHandler : MonoBehaviour
         print("Serial ports open");
 
         servoControl = "s00000e";
+
+        sp2.ReadTimeout = 100;
+        sp2.Open();
+        print("Serial port2 open");
     }
 
     public bool SendString(string string_data){
 
         if(sp.IsOpen){
             sp.Write(string_data);
-            return true;
         }
         else{
             // throw Exception;
+            return false;
+        }
+
+        if(sp2.IsOpen){
+            sp2.Write(string_data);
+            return true;
+        }
+        else{
             return false;
         }
     }
@@ -94,7 +106,10 @@ public class SerialPortHandler : MonoBehaviour
 
                 yaw = (float)(yaw * 180 / 3.14);
                 pitch = (float)(pitch * 180 / 3.14);
-                roll = (float)(roll * 180 / 3.14);
+                roll = (float)((roll-0.5f) * 180 / 3.14);
+                // roll = (float)(roll * -180f / 3.14);
+
+
 
                 zyro_data[0] = yaw;
                 zyro_data[1] = pitch;

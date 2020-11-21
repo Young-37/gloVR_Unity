@@ -227,6 +227,7 @@ public class HandController : MonoBehaviour
 	{
 		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 		
+<<<<<<< HEAD
 		// if(! isCatching){
 		// 	RotateFinger(flexData);
 		// 	hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
@@ -245,6 +246,40 @@ public class HandController : MonoBehaviour
 		// if(isCatching){
 		// 	setFingerValue(flexData);
 		// }
+=======
+		if(! isCatching){
+			RotateFinger(flexData);
+			print("=====flex========");
+			print(flexData[0]);
+			print(flexData[1]);
+			print(flexData[2]);
+			print(flexData[3]);
+			print(flexData[4]);
+			print("================");
+
+			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
+			print("-----------ypr---------------- ");
+			print(ypr[0]);
+			print(ypr[1]);
+			print(ypr[2]);
+			print("--------------------------- ");
+
+			// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
+
+
+			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
+			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
+
+			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+
+			Debug.Log("Receive serial data");
+		}
+
+		if(isCatching){
+			setFingerValue(flexData);
+		}
+>>>>>>> 0222722bc2564ae759754dd6df6f4e8a2a69f1c9
 		
 		// if(UHandler.newData){
 		// 	MoveHand();
