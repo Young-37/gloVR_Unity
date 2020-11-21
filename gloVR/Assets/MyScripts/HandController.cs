@@ -226,8 +226,7 @@ public class HandController : MonoBehaviour
 	void Update()
 	{
 		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
-		
-<<<<<<< HEAD
+
 		// if(! isCatching){
 		// 	RotateFinger(flexData);
 		// 	hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
@@ -246,7 +245,7 @@ public class HandController : MonoBehaviour
 		// if(isCatching){
 		// 	setFingerValue(flexData);
 		// }
-=======
+
 		if(! isCatching){
 			RotateFinger(flexData);
 			print("=====flex========");
@@ -279,7 +278,6 @@ public class HandController : MonoBehaviour
 		if(isCatching){
 			setFingerValue(flexData);
 		}
->>>>>>> 0222722bc2564ae759754dd6df6f4e8a2a69f1c9
 		
 		// if(UHandler.newData){
 		// 	MoveHand();
