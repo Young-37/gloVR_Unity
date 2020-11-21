@@ -96,22 +96,22 @@ public class HandController : MonoBehaviour
     void Start()
 	{
         // //get SPHandler
-		try{
-      		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-			SPHandler.DiscardBuffer();
-    	}
-    	catch(Exception e){
-      		Debug.Log(e);
-    	}
-		
-		//get UHandler
-    	try{
-			print("GET UHandler");
-      		UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-    	}
-    	catch(Exception e){
-      		Debug.Log(e);
-    	}
+		// try{
+      	// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+		// 	SPHandler.DiscardBuffer();
+    	// }
+    	// catch(Exception e){
+      	// 	Debug.Log(e);
+    	// }
+		// 
+		// //get UHandler
+    	// try{
+		// 	print("GET UHandler");
+      	// 	UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+    	// }
+    	// catch(Exception e){
+      	// 	Debug.Log(e);
+    	// }
 
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
@@ -225,31 +225,31 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
 	void Update()
 	{
-		SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
 		
-		if(! isCatching){
-			RotateFinger(flexData);
-			hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
-
-
-			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
-
-			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-			// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-
-			Debug.Log("Receive serial data");
-		}
-
-		if(isCatching){
-			setFingerValue(flexData);
-		}
+		// if(! isCatching){
+		// 	RotateFinger(flexData);
+		// 	hand.transform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
+		// 	// hand.transform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
+		// 
+		// 
+		// 	// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
+		// 	// hand.transform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
+		// 
+		// 	// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+		// 	// hand.transform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
+		// 
+		// 	Debug.Log("Receive serial data");
+		// }
+		// 
+		// if(isCatching){
+		// 	setFingerValue(flexData);
+		// }
 		
-		if(UHandler.newData){
-			MoveHand();
-			Debug.Log("Receive UDP data");
-		}
+		// if(UHandler.newData){
+		// 	MoveHand();
+		// 	Debug.Log("Receive UDP data");
+		// }
 
 		// when mouse button down
 		if (Input.GetMouseButtonUp(0))
@@ -276,13 +276,13 @@ public class HandController : MonoBehaviour
 		// catch ball
 		if (catch_ball)
 		{
-			try{
-				SPHandler.setServo(0);
-				SPHandler.SendVibe();
-			}
-			catch(Exception e){
-				Debug.Log(e);
-			}
+			// try{
+			// 	SPHandler.setServo(0);
+			// 	SPHandler.SendVibe();
+			// }
+			// catch(Exception e){
+			// 	Debug.Log(e);
+			// }
 				
 			isCatching = true;
 

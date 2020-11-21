@@ -31,12 +31,12 @@ public class BallController : MonoBehaviour
 	void Start()
     {
 
-		try{
-     		SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    	}
-    	catch(System.Exception e){
-      		Debug.Log(e);
-    	}
+		// try{
+     	// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+    	// }
+    	// catch(System.Exception e){
+      	// 	Debug.Log(e);
+    	// }
 		// find Hand object
 		hand = GameObject.Find("Hand");
 
@@ -72,12 +72,12 @@ public class BallController : MonoBehaviour
 		{
 			level = Random.Range(0, 4);
 			Debug.Log(level);
-			try{
-				SPHandler.setServo(level);
-			}
-			catch(System.Exception e){
-				Debug.Log(e);
-			}
+			// try{
+			// 	SPHandler.setServo(level);
+			// }
+			// catch(System.Exception e){
+			// 	Debug.Log(e);
+			// }
 
 			// put ball at start point
 			this.gameObject.SetActive(true);
