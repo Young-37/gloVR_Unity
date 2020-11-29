@@ -25,6 +25,8 @@ public class BaseballPlayerController : MonoBehaviour
 		// find Hand object
 		hand = GameObject.Find("Hand");
 		hand_Motion = hand.GetComponent<HandController>();
+
+		//animator.SetBool("isThrowing", false);
 	}
 
     // Update is called once per frame
@@ -45,7 +47,8 @@ public class BaseballPlayerController : MonoBehaviour
 	{
 		if (!hand_Motion.isCatching)
 		{
-			ballController.throwBall = true;
+			//ballController.throwBall = true;
+			ballController.ThrowBall();
 		}
 	}
 }

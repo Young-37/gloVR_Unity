@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BallController : MonoBehaviour
 {
@@ -27,25 +28,33 @@ public class BallController : MonoBehaviour
 	public bool throwBall;
 	private bool isFlying;
 
+	private Transform myTransform;
+	private Transform handTransform;
+	private Transform baseballPlayerBallTransform;
+
 	// Start is called before the first frame update
 	void Start()
     {
 
 		// try{
-     	// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-    	// }
-    	// catch(System.Exception e){
-      	// 	Debug.Log(e);
-    	// }
+		// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+		// }
+		// catch(System.Exception e){
+		// 	Debug.Log(e);
+		// }
 		// find Hand object
-		hand = GameObject.Find("Hand");
+		myTransform = this.transform;
 
+		hand = GameObject.Find("Hand");
+		handTransform = hand.transform;
+
+		baseballPlayerBallTransform = baseballPlayerBall.transform;
 		hand_Motion = hand.GetComponent<HandController>();
 
 		// put ball at start point
-		startPos = baseballPlayerBall.transform.position; ;
+		startPos = baseballPlayerBallTransform.position;
 		targetPos = startPos;
-		this.transform.position = targetPos;
+		myTransform.position = targetPos;
 		moveVector = new Vector3(0, 0, 0);
 
 		// initialization
@@ -63,53 +72,53 @@ public class BallController : MonoBehaviour
     {
 		if (!isFlying)
 		{
-			this.transform.position = baseballPlayerBall.transform.position;
-			targetPos = this.transform.position;
+			myTransform.position = baseballPlayerBallTransform.position;
+			targetPos = myTransform.position;
 			moveVector = new Vector3(0, 0, 0);
 		}
 
-		if (throwBall && !hand_Motion.isCatching)
-		{
-			level = Random.Range(0, 4);
-			Debug.Log(level);
-			// try{
-			// 	SPHandler.setServo(level);
-			// }
-			// catch(System.Exception e){
-			// 	Debug.Log(e);
-			// }
-
-			// put ball at start point
-			this.gameObject.SetActive(true);
-			this.transform.position = baseballPlayerBall.transform.position;
-
-			// set target point
-			float targetX = Random.Range(35f - range, 35f + range);
-			float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
-			if (targetY < 1.6f)
-			{
-				targetY = 1.6f;
-			}
-			float targetZ = hand.transform.position.z - 0.46f;
-
-			Debug.Log(targetPos);
-			targetPos = new Vector3(targetX, targetY, targetZ);
-			moveVector = targetPos - this.transform.position;
-
-			throwBall = false;
-			isFlying = true;
-		}
+		//if (throwBall && !hand_Motion.isCatching)
+		//{
+		//	level = Random.Range(0, 4);
+		//	Debug.Log(level);
+		//	// try{
+		//	// 	SPHandler.setServo(level);
+		//	// }
+		//	// catch(System.Exception e){
+		//	// 	Debug.Log(e);
+		//	// }
+		//
+		//	// put ball at start point
+		//	this.gameObject.SetActive(true);
+		//	myTransform.position = baseballPlayerBallTransform.position;
+		//
+		//	// set target point
+		//	float targetX = Random.Range(35f - range, 35f + range);
+		//	float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
+		//	if (targetY < 1.6f)
+		//	{
+		//		targetY = 1.6f;
+		//	}
+		//	float targetZ = handTransform.position.z - 0.46f;
+		//
+		//	Debug.Log(targetPos);
+		//	targetPos = new Vector3(targetX, targetY, targetZ);
+		//	moveVector = targetPos - myTransform.position;
+		//
+		//	throwBall = false;
+		//	isFlying = true;
+		//}
 		
 		if (isFlying && !throwBall)
 		{
-			//this.transform.position != targetPos
-			this.transform.Translate(moveVector * Time.deltaTime * speed, Space.World);
-			this.transform.Rotate(moveVector);
+			//myTransform.position != targetPos
+			myTransform.Translate(moveVector * Time.deltaTime * speed, Space.World);
+			myTransform.Rotate(moveVector);
 		}
 
 		// catch ball (distance, z value, flex value)
-		if (Vector3.Distance(this.transform.position, new Vector3(hand.transform.position.x, hand.transform.position.y + 0.95f, hand.transform.position.z)) < distance
-			&& this.transform.position.z < (hand.transform.position.z - 0.46f)
+		if (Vector3.Distance(myTransform.position, new Vector3(handTransform.position.x, handTransform.position.y + 0.95f, handTransform.position.z)) < distance
+			&& myTransform.position.z < (handTransform.position.z - 0.46f)
 			// && hand_Motion.thumb_flex < 140 
 			// && hand_Motion.index_finger_flex < 120
 			// && hand_Motion.middle_finger_flex < 125
@@ -125,16 +134,17 @@ public class BallController : MonoBehaviour
 			isFlying = false;
 
 			// put ball at start point
-			this.transform.position = startPos;
+			myTransform.position = startPos;
 			// stop ball
-			targetPos = this.transform.position;
+			targetPos = myTransform.position;
 
-			hand_Motion.catch_ball = true;
+			//hand_Motion.catch_ball = true;
+			hand_Motion.CatchBall();
 			// hand_Motion.add_score = true;
 		}
 
 		// fail ball
-		if (this.transform.position.z > (hand.transform.position.z + 2f) && isFlying)
+		if (myTransform.position.z > (handTransform.position.z + 2f) && isFlying)
 		{
 			isFlying = false;
 
@@ -145,9 +155,9 @@ public class BallController : MonoBehaviour
 			hand_Motion.fail_ball_num = hand_Motion.fail_ball_num + 1;
 
 			// put ball at start point
-			this.transform.position = startPos;
+			myTransform.position = startPos;
 			// stop ball
-			targetPos = this.transform.position;
+			targetPos = myTransform.position;
 
 			if (hand_Motion.fail_ball_num == 1)
 			{
@@ -161,8 +171,41 @@ public class BallController : MonoBehaviour
 
 			if (hand_Motion.fail_ball_num == 3)
 			{
+				SceneManager.LoadScene("GameOverScene");
 				hand_Motion.baseball1.gameObject.SetActive(false);
 			}
 		}
+	}
+
+	public void ThrowBall()
+	{
+		level = Random.Range(0, 4);
+		Debug.Log(level);
+		// try{
+		// 	SPHandler.setServo(level);
+		// }
+		// catch(System.Exception e){
+		// 	Debug.Log(e);
+		// }
+
+		// put ball at start point
+		this.gameObject.SetActive(true);
+		myTransform.position = baseballPlayerBallTransform.position;
+
+		// set target point
+		float targetX = Random.Range(35f - range, 35f + range);
+		float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
+		if (targetY < 1.6f)
+		{
+			targetY = 1.6f;
+		}
+		float targetZ = handTransform.position.z - 0.46f;
+
+		Debug.Log(targetPos);
+		targetPos = new Vector3(targetX, targetY, targetZ);
+		moveVector = targetPos - myTransform.position;
+
+		throwBall = false;
+		isFlying = true;
 	}
 }
