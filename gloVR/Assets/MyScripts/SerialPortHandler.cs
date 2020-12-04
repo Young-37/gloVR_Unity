@@ -7,7 +7,7 @@ using System.IO.Ports;
 public class SerialPortHandler : MonoBehaviour
 {
     SerialPort sp = new SerialPort("/dev/tty.MAIN-Port",9600);
-    SerialPort sp2 = new SerialPort("/dev/tty.SERV-DevB",9600);
+    SerialPort sp2 = new SerialPort("/dev/tty.AWARD-Port",9600);
 
     public string servoControl;
 
@@ -17,14 +17,14 @@ public class SerialPortHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //port open
-        sp.ReadTimeout = 100;
+        // port open
+        sp.ReadTimeout = 10;
         sp.Open();
         print("Serial ports open");
 
         servoControl = "s00000e";
 
-        sp2.ReadTimeout = 100;
+        sp2.ReadTimeout = 5;
         sp2.Open();
         print("Serial port2 open");
     }
@@ -66,59 +66,61 @@ public class SerialPortHandler : MonoBehaviour
         return false;
     }
 
-    public bool ReceiveArduinoData(ref int[] flex_data,ref float[] zyro_data){
+    char[] teapotPacket = new char[14];  // InvenSense Teapot packet
+    int serialCount = 0;                 // current packet byte position
+    int synced = 0;
+
+    public void ReceiveArduinoData(ref int[] flex_data,ref float[] q) {
+
         int start_byte = 0;
-        int end_byte = 0;
 
-        int i = 0;
-        string receiveData1 = "";
-        string receiveData2 = "";
-        string receiveData3 = "";
-        float yaw;
-        float pitch;
-        float roll;
+        try{
+            start_byte = sp.ReadByte();
+        }
+        catch(System.Exception e){
+            Debug.Log(e);
+        }
 
+        if(start_byte != 200) return;
 
-        if(sp.IsOpen){
-            try{
-                start_byte = sp.ReadByte();
+        for(int i=0;i<5;i++){
+            flex_data[i] = sp.ReadByte();
+        }
+
+        while (sp.BytesToRead > 0) {
+
+            int ch = sp.ReadByte();
+
+            if (synced == 0 && ch != '$') return;   // initial synchronization - also used to resync/realign if needed
+            synced = 1;
+            print((char)ch);
+
+            if ((serialCount == 1 && ch != 2)
+                || (serialCount == 12 && ch != '\r')
+                || (serialCount == 13 && ch != '\n'))  {
+                serialCount = 0;
+                synced = 0;
+                return;
             }
-            catch(System.Exception e){
-                Debug.Log(e);
-            }
 
-            if(start_byte == 200){
-                for(i=0;i<5;i++){
-                    flex_data[i] = sp.ReadByte();
+            if (serialCount > 0 || ch == '$') {
+                teapotPacket[serialCount++] = (char)ch;
+                if (serialCount == 14) {
+                    serialCount = 0; // restart packet byte position
+                    
+                    // get quaternion from data packet
+                    q[0] = ((teapotPacket[2] << 8) | teapotPacket[3]) / 16384.0f;
+                    q[1] = ((teapotPacket[4] << 8) | teapotPacket[5]) / 16384.0f;
+                    q[2] = ((teapotPacket[6] << 8) | teapotPacket[7]) / 16384.0f;
+                    q[3] = ((teapotPacket[8] << 8) | teapotPacket[9]) / 16384.0f;
+                    for (int i = 0; i < 4; i++) if (q[i] >= 2) q[i] = -4 + q[i];
+                    
+                    // set our toxilibs quaternion to new data
+                    // quat.set(q[0], q[1], q[2], q[3]);
+
                 }
-
-                receiveData1 = sp.ReadLine();
-                receiveData2 = sp.ReadLine();
-                receiveData3 = sp.ReadLine();
-                
-                end_byte = sp.ReadByte();
-            }
-
-            if(end_byte == 201){
-                yaw = float.Parse(receiveData1);
-                pitch = float.Parse(receiveData2);
-                roll = float.Parse(receiveData3);
-
-                yaw = (float)(yaw * 180 / 3.14);
-                pitch = (float)(pitch * 180 / 3.14);
-                roll = (float)((roll-0.5f) * 180 / 3.14);
-                // roll = (float)(roll * -180f / 3.14);
-
-
-
-                zyro_data[0] = yaw;
-                zyro_data[1] = pitch;
-                zyro_data[2] = roll;
-
-                return true;
             }
         }
-        return false;
     }
 
     public void setServo(int level){

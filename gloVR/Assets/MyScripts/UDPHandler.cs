@@ -24,6 +24,7 @@ public class UDPHandler : MonoBehaviour
 
     void start(){
         port = 5065;
+        InitUDP();
     }
 
     public void SendString(string sData)

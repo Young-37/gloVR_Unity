@@ -15,7 +15,9 @@ public class HandController : MonoBehaviour
 
     //received data from arduino;
     int[] flexData = new int[5];
-    float[] ypr = new float[3];
+	
+	float[] q = new float[4];
+	Quaternion quat = new Quaternion(1, 0, 0, 0);
 
 	//data for openCV
 	float beforeXPos;
@@ -115,23 +117,23 @@ public class HandController : MonoBehaviour
 //-----------------------------------------------------------------start----------------------------------------------------------------------------------
     void Start()
 	{
-		// //get SPHandler
-		// try{
-		// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-		// 	SPHandler.DiscardBuffer();
-		// }
-		// catch(Exception e){
-		// 	Debug.Log(e);
-		// }
-		// 
-		// //get UHandler
-		// try{
-		// 	print("GET UHandler");
-		// 	UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-		// }
-		// catch(Exception e){
-		// 	Debug.Log(e);
-		// }
+		//get SPHandler
+		try{
+			SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+		}
+		catch(Exception e){
+			Debug.Log(e);
+		}
+		
+		//get UHandler
+		try{
+			print("GET UHandler");
+			UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
+			UHandler.InitUDP();
+		}
+		catch(Exception e){
+			Debug.Log(e);
+		}
 
 		// catch ball object
 		catch_ball_object = GameObject.Find("Catch_Ball");
@@ -151,54 +153,6 @@ public class HandController : MonoBehaviour
 		// read all Children of current object
 		//Transform child = null;
 		Transform[] allChildren = GetComponentsInChildren<Transform>();
-
-		// iterate
-		//foreach (Transform child in allChildren)
-		//{
-		//	// find hand object
-		//	if (child.name == "Hand")
-		//		hand = child.gameObject;
-		//
-		//	// find thumb object
-		//	if (child.name == "thumb_0")
-		//		thumb_0 = child.gameObject;
-		//	if (child.name == "thumb_1")
-		//		thumb_1 = child.gameObject;
-		//	if (child.name == "thumb_2")
-		//		thumb_2 = child.gameObject;
-		//
-		//	// find index finger object
-		//	if (child.name == "index_finger_1")
-		//		index_finger_1 = child.gameObject;
-		//	if (child.name == "index_finger_2")
-		//		index_finger_2 = child.gameObject;
-		//	if (child.name == "index_finger_3")
-		//		index_finger_3 = child.gameObject;
-		//
-		//	// find middle finger object
-		//	if (child.name == "middle_finger_1")
-		//		middle_finger_1 = child.gameObject;
-		//	if (child.name == "middle_finger_2")
-		//		middle_finger_2 = child.gameObject;
-		//	if (child.name == "middle_finger_3")
-		//		middle_finger_3 = child.gameObject;
-		//
-		//	// find ring finger object
-		//	if (child.name == "ring_finger_1")
-		//		ring_finger_1 = child.gameObject;
-		//	if (child.name == "ring_finger_2")
-		//		ring_finger_2 = child.gameObject;
-		//	if (child.name == "ring_finger_3")
-		//		ring_finger_3 = child.gameObject;
-		//
-		//	// find pinky object
-		//	if (child.name == "pinky_1")
-		//		pinky_1 = child.gameObject;
-		//	if (child.name == "pinky_2")
-		//		pinky_2 = child.gameObject;
-		//	if (child.name == "pinky_3")
-		//		pinky_3 = child.gameObject;
-		//}
 
 		int length = allChildren.Length;
 		for (int i = 0; i < length; i++)
@@ -270,11 +224,6 @@ public class HandController : MonoBehaviour
 		pinky_2Transform = pinky_2.transform;
 		pinky_3Transform = pinky_3.transform;
 
-		// set default finger as index finger
-		//finger_1 = index_finger_1;
-		//finger_2 = index_finger_2;
-		//finger_3 = index_finger_3;
-
 		// initialization
 		mouseWorldPosition = handTransform.position;
 
@@ -314,160 +263,142 @@ public class HandController : MonoBehaviour
 
 //--------------------------------------------------------------------update--------------------------------------------------------------------------------
     // Update is called once per frame
+	float minus_tmp = 0.0005f;
+	int tmp_num = 0;
+	float[] tmp_q = new float[2];
+	float dif;
+
 	void Update()
 	{
-		// SPHandler.ReceiveArduinoData(ref flexData, ref ypr);
+		SPHandler.ReceiveArduinoData(ref flexData, ref q);
+		if(tmp_num < 2)
+		{
+			tmp_q[tmp_num] = q[3];
+			tmp_num++;
+		}
+		else
+		{
+			dif = tmp_q[1] - tmp_q[0];
+		}
+		
 
-		// if(! isCatching){
-		// 	RotateFinger(flexData);
-		// 	handTransform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
-		// 	// handTransform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
-		// 
-		// 
-		// 	// handTransform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
-		// 	// handTransform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
-		// 
-		// 	// handTransform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-		// 	// handTransform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-		// 
-		// 	Debug.Log("Receive serial data");
-		// }
-		// 
-		// if(isCatching){
-		// 	setFingerValue(flexData);
-		// }
-
+		// 못잡았을때.
 		if(! isCatching){
 			RotateFinger(flexData);
-			print("=====flex========");
-			print(flexData[0]);
-			print(flexData[1]);
-			print(flexData[2]);
-			print(flexData[3]);
-			print(flexData[4]);
-			print("================");
+			//q[0] -> w, q[1] -> x, q[2] -> y, q[3] -> z
+			// quat.Set(-q[2], q[3] + dif , q[1], -q[0]);
+			quat.Set(-q[2], q[3], q[1], -q[0]);
+			dif += dif;
+			handTransform.rotation = quat;
 
-			handTransform.rotation = Quaternion.Euler(ypr[1] * -1f,ypr[2] * -1f,ypr[0]);
-			print("-----------ypr---------------- ");
-			print(ypr[0]);
-			print(ypr[1]);
-			print(ypr[2]);
-			print("--------------------------- ");
-
-			// handTransform.rotation = Quaternion.Euler(ypr[1],ypr[0],ypr[2]);
-
-
-			// handTransform.rotation = Quaternion.Euler(ypr[0],ypr[2],ypr[1]);
-			// handTransform.rotation = Quaternion.Euler(ypr[0],ypr[1],ypr[2]);
-
-			// handTransform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-			// handTransform.rotation = Quaternion.Euler(ypr[2],ypr[1],ypr[0]);
-
+			//debug.
+			Debug.Log(q[0].ToString()+", "+q[1].ToString()+", " + q[2].ToString() + ", " + q[3].ToString());
 			Debug.Log("Receive serial data");
 		}
 
-		//if(isCatching){
-		//	setFingerValue(flexData);
-		//}
 		
-		// if(UHandler.newData){
-		// 	MoveHand();
-		// 	Debug.Log("Receive UDP data");
+		if(isCatching){
+			setFingerValue(flexData);
+		}
+		
+		if(UHandler.newData){
+			MoveHand();
+			Debug.Log("Receive UDP data");
+		}
+
+		// // when mouse button down
+		// if (Input.GetMouseButtonUp(0))
+		// {
+		// 	// change hand's world coordinate to screen coordinate (to get z(depth) value)
+		// 	Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(handTransform.position);
+
+		// 	// change mouse's screen coordinate to world coordinate
+		// 	mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
+		// 	Debug.Log("클릭시 : ");
+		// 	print(Input.mousePosition.x);
+		// 	print(Input.mousePosition.y);
+		// 	print(handScreenPosition.z);
+		// 	//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
+		// 	//mouseWorldPosition.y = mouseWorldPosition.y;
 		// }
 
-		// when mouse button down
-		if (Input.GetMouseButtonUp(0))
-		{
-			// change hand's world coordinate to screen coordinate (to get z(depth) value)
-			Vector3 handScreenPosition = Camera.main.WorldToScreenPoint(handTransform.position);
-
-			// change mouse's screen coordinate to world coordinate
-			mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, handScreenPosition.z));
-			Debug.Log("클릭시 : ");
-			print(Input.mousePosition.x);
-			print(Input.mousePosition.y);
-			print(handScreenPosition.z);
-			//mouseWorldPosition.y = mouseWorldPosition.y - 1.15f;
-			//mouseWorldPosition.y = mouseWorldPosition.y;
-		}
-
-		// move hand
-		if (handTransform.position != mouseWorldPosition)
-		{
-			handTransform.position = Vector3.MoveTowards(handTransform.position, mouseWorldPosition, speed * Time.deltaTime);
-		}
+		// // move hand
+		// if (handTransform.position != mouseWorldPosition)
+		// {
+		// 	handTransform.position = Vector3.MoveTowards(handTransform.position, mouseWorldPosition, speed * Time.deltaTime);
+		// }
 
 		// catch ball
-		//if (catch_ball)
-		//{
-		//	// try{
-		//	// 	SPHandler.setServo(0);
-		//	// 	SPHandler.SendVibe();
-		//	// }
-		//	// catch(Exception e){
-		//	// 	Debug.Log(e);
-		//	// }
-		//		
-		//	isCatching = true;
-		//
-		//	// thumb
-		//	finger_degree = -50;
-		//
-		//	thumb_0Transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
-		//	thumb_1Transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
-		//	thumb_2Transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
-		//
-		//	thumb_flex = finger_degree + 180;
-		//
-		//	// index finger
-		//	finger_degree = -70;
-		//
-		//	index_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-		//	index_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-		//	index_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-		//
-		//	index_finger_flex = finger_degree + 180;
-		//
-		//	// middle finger & ring finger
-		//	finger_degree = -65;
-		//
-		//	middle_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-		//	middle_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-		//	middle_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-		//
-		//	middle_finger_flex = finger_degree + 180;
-		//
-		//	ring_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-		//	ring_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-		//	ring_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-		//
-		//	ring_finger_flex = finger_degree + 180;
-		//
-		//	finger_degree = -55;
-		//
-		//	// pinky
-		//	pinky_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
-		//	pinky_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
-		//	pinky_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
-		//
-		//	pinky_flex = finger_degree + 180;
-		//
-		//	// copy catch ball
-		//	catch_ball_copy = Instantiate(catch_ball_object) as GameObject;
-		//	// create catch ball as hand's child
-		//	catch_ball_copy.transform.parent = this.transform;
-		//	// set position
-		//	catch_ball_copy.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
-		//	// set scale
-		//	catch_ball_copy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-		//	catch_ball_copy.gameObject.SetActive(true);
-		//
-		//	// add score and update UI
-		//	score = score + 10;
-		//	scoreText.text = string.Format("Score: {0}", score);
-		//
-		//	catch_ball = false;
-		//}
+		if (catch_ball)
+		{
+			try{
+				SPHandler.setServo(0);
+				SPHandler.SendVibe();
+			}
+			catch(Exception e){
+				Debug.Log(e);
+			}
+				
+			isCatching = true;
+		
+			// thumb
+			finger_degree = -50;
+		
+			thumb_0Transform.localEulerAngles = new Vector3(-28.32f, ((-finger_degree - 160) / 5), -25.86f);
+			thumb_1Transform.localEulerAngles = new Vector3(2.37f, -0.297f, -finger_degree) * 0.5f;
+			thumb_2Transform.localEulerAngles = new Vector3(1.36f, -0.126f, -finger_degree) * 0.3f;
+		
+			thumb_flex = finger_degree + 180;
+		
+			// index finger
+			finger_degree = -70;
+		
+			index_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			index_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			index_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+		
+			index_finger_flex = finger_degree + 180;
+		
+			// middle finger & ring finger
+			finger_degree = -65;
+		
+			middle_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			middle_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			middle_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+		
+			middle_finger_flex = finger_degree + 180;
+		
+			ring_finger_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			ring_finger_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			ring_finger_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+		
+			ring_finger_flex = finger_degree + 180;
+		
+			finger_degree = -55;
+		
+			// pinky
+			pinky_1Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.5f;
+			pinky_2Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.8f;
+			pinky_3Transform.localEulerAngles = new Vector3(finger_degree, 0, 0) * 0.3f;
+		
+			pinky_flex = finger_degree + 180;
+		
+			// copy catch ball
+			catch_ball_copy = Instantiate(catch_ball_object) as GameObject;
+			// create catch ball as hand's child
+			catch_ball_copy.transform.parent = this.transform;
+			// set position
+			catch_ball_copy.transform.localPosition = new Vector3(0, -0.04f, -0.115f);
+			// set scale
+			catch_ball_copy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+			catch_ball_copy.gameObject.SetActive(true);
+		
+			// add score and update UI
+			score = score + 10;
+			scoreText.text = string.Format("Score: {0}", score);
+		
+			catch_ball = false;
+		}
 
 		// check catching
 		if (isCatching
@@ -483,48 +414,7 @@ public class HandController : MonoBehaviour
 			catch_ball_copy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
 		
-		// fail ball
-		// if (fail_ball)
-		// {
-		// 	// play animation
-		// 	if (play_anim)
-		// 	{
-		// 		// play animation
-		// 		anim.Play("no");
-		// 		play_anim = false;
-		// 	}
-		// 
-		// 	timer += Time.deltaTime;
-		// 
-		// 	// when animation end
-		// 	if (timer > 1.6f)
-		// 	{
-		// 		fail_ball = false;
-		// 
-		// 		timer = 0.0f;
-		// 
-		// 		// set finger as flex value
-		// 		thumb_0Transform.localEulerAngles = new Vector3(-28.32f, ((-(thumb_flex - 180) - 160) / 5), -25.86f);
-		// 		thumb_1Transform.localEulerAngles = new Vector3(2.37f, -0.297f, -(thumb_flex - 180)) * 0.5f;
-		// 		thumb_2Transform.localEulerAngles = new Vector3(1.36f, -0.126f, -(thumb_flex - 180)) * 0.3f;
-		// 
-		// 		index_finger_1Transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.5f;
-		// 		index_finger_2Transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.8f;
-		// 		index_finger_3Transform.localEulerAngles = new Vector3((index_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		middle_finger_1Transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.5f;
-		// 		middle_finger_2Transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.8f;
-		// 		middle_finger_3Transform.localEulerAngles = new Vector3((middle_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		ring_finger_1Transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.5f;
-		// 		ring_finger_2Transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.8f;
-		// 		ring_finger_3Transform.localEulerAngles = new Vector3((ring_finger_flex - 180), 0, 0) * 0.3f;
-		// 
-		// 		pinky_1Transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.5f;
-		// 		pinky_2Transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.8f;
-		// 		pinky_3Transform.localEulerAngles = new Vector3((pinky_flex - 180), 0, 0) * 0.3f;
-		// 	}
-		// }
+		
 	}
 
 //--------------------------------------------------------------------update end--------------------------------------------------------------------------------
@@ -622,25 +512,25 @@ public class HandController : MonoBehaviour
 			rotate_degree[i] = intDataArr[i] - 180;
 		}
 
-        thumb_0Transform.localEulerAngles = new Vector3(-28.32f, ((-rotate_degree[4] - 160) / 5), -25.86f);
-		thumb_1Transform.localEulerAngles = new Vector3(2.37f, -0.297f, -rotate_degree[4]) * 0.5f;
-		thumb_2Transform.localEulerAngles = new Vector3(1.36f, -0.126f, -rotate_degree[4]) * 0.3f;
+        thumb_0Transform.localEulerAngles = new Vector3(-28.32f, ((-rotate_degree[0] - 160) / 5), -25.86f);
+		thumb_1Transform.localEulerAngles = new Vector3(2.37f, -0.297f, -rotate_degree[0]) * 0.5f;
+		thumb_2Transform.localEulerAngles = new Vector3(1.36f, -0.126f, -rotate_degree[0]) * 0.3f;
 
-		index_finger_1Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
-		index_finger_2Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
-		index_finger_3Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
+		index_finger_1Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
+		index_finger_2Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
+		index_finger_3Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
 		
 		middle_finger_1Transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.5f;
 		middle_finger_2Transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.8f;
 		middle_finger_3Transform.localEulerAngles = new Vector3(rotate_degree[2], 0, 0) * 0.3f;
 		
-		ring_finger_1Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.5f;
-		ring_finger_2Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.8f;
-		ring_finger_3Transform.localEulerAngles = new Vector3(rotate_degree[1], 0, 0) * 0.3f;
+		ring_finger_1Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.5f;
+		ring_finger_2Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.8f;
+		ring_finger_3Transform.localEulerAngles = new Vector3(rotate_degree[3], 0, 0) * 0.3f;
 		
-		pinky_1Transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.5f;
-		pinky_2Transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.8f;
-		pinky_3Transform.localEulerAngles = new Vector3(rotate_degree[0], 0, 0) * 0.3f;
+		pinky_1Transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.5f;
+		pinky_2Transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.8f;
+		pinky_3Transform.localEulerAngles = new Vector3(rotate_degree[4], 0, 0) * 0.3f;
 
 		thumb_flex = intDataArr[0];
 		index_finger_flex = intDataArr[1];
