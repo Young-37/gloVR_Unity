@@ -31,13 +31,13 @@ public class SerialPortHandler : MonoBehaviour
 
     public bool SendString(string string_data){
 
-        if(sp.IsOpen){
-            sp.Write(string_data);
-        }
-        else{
-            // throw Exception;
-            return false;
-        }
+        // if(sp.IsOpen){
+        //     sp.Write(string_data);
+        // }
+        // else{
+        //     // throw Exception;
+        //     return false;
+        // }
 
         if(sp2.IsOpen){
             sp2.Write(string_data);
@@ -93,7 +93,7 @@ public class SerialPortHandler : MonoBehaviour
 
             if (synced == 0 && ch != '$') return;   // initial synchronization - also used to resync/realign if needed
             synced = 1;
-            print((char)ch);
+            // print((char)ch);
 
             if ((serialCount == 1 && ch != 2)
                 || (serialCount == 12 && ch != '\r')
@@ -132,7 +132,7 @@ public class SerialPortHandler : MonoBehaviour
             a = (char)((int)a + level);
 
             if((int)a > 51){
-                print((int)a);
+                // print((int)a);
                 a = '3';
             }
 
@@ -140,7 +140,7 @@ public class SerialPortHandler : MonoBehaviour
             temp = temp.Remove(i+1,1);
         }
         
-        print(temp);
+        // print(temp);
 
         for(i=0;i<5;i++){
             SendString(temp);

@@ -15,8 +15,8 @@ public class UDPHandler : MonoBehaviour
     }
 
     Thread receiveThread;
-    UdpClient udpClient;
-    UdpClient udpClient2;
+    public UdpClient udpClient;
+    public UdpClient udpClient2;
 
     int port;
     public String text;
@@ -24,7 +24,7 @@ public class UDPHandler : MonoBehaviour
 
     void start(){
         port = 5065;
-        InitUDP();
+        // InitUDP();
     }
 
     public void SendString(string sData)
@@ -72,7 +72,7 @@ public class UDPHandler : MonoBehaviour
                 byte[] data = udpClient2.Receive(ref anyIP);
 
                 text = Encoding.UTF8.GetString(data);
-                // print(">> " + text);
+                print(">> " + text);
 
                 newData = true;
             }
@@ -81,6 +81,11 @@ public class UDPHandler : MonoBehaviour
             }
 
         }
+    }
+
+    public void closeUDP(){
+        udpClient.Close();
+        udpClient2.Close();
     }
 
     public void StopThread(){

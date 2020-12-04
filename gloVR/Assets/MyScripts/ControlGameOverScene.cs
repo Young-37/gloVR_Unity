@@ -31,6 +31,8 @@ public class ControlGameOverScene : MonoBehaviour
       		Debug.Log(e);
     	}
 
+		UHandler.closeUDP();
+
 		text = GetComponent<Text>();
 		text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
 
@@ -54,13 +56,13 @@ public class ControlGameOverScene : MonoBehaviour
 		Debug.Log("Send End_string");
 
       	//udp로 데이터 보내기
-      	try{
-        	UHandler.SendString("1");
-			UHandler.StopThread();
-      	}
-      	catch(Exception e){
-        	Debug.Log(e);
-      	}
+      	// try{
+        // 	UHandler.SendString("1");
+		// 	UHandler.StopThread();
+      	// }
+      	// catch(Exception e){
+        // 	Debug.Log(e);
+      	// }
 
 
 

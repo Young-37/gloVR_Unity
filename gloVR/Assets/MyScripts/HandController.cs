@@ -129,7 +129,7 @@ public class HandController : MonoBehaviour
 		try{
 			print("GET UHandler");
 			UHandler = GameObject.Find("UP").GetComponent<UDPHandler>();
-			UHandler.InitUDP();
+			// UHandler.InitUDP();
 		}
 		catch(Exception e){
 			Debug.Log(e);
@@ -299,6 +299,8 @@ public class HandController : MonoBehaviour
 		
 		if(isCatching){
 			setFingerValue(flexData);
+			quat.Set(-q[2], q[3], q[1], -q[0]);
+			handTransform.rotation = quat;
 		}
 		
 		if(UHandler.newData){

@@ -36,12 +36,12 @@ public class BallController : MonoBehaviour
 	void Start()
     {
 
-		// try{
-		// 	SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
-		// }
-		// catch(System.Exception e){
-		// 	Debug.Log(e);
-		// }
+		try{
+			SPHandler = GameObject.Find("SP").GetComponent<SerialPortHandler>();
+		}
+		catch(System.Exception e){
+			Debug.Log(e);
+		}
 		// find Hand object
 		myTransform = this.transform;
 
@@ -77,37 +77,37 @@ public class BallController : MonoBehaviour
 			moveVector = new Vector3(0, 0, 0);
 		}
 
-		//if (throwBall && !hand_Motion.isCatching)
-		//{
-		//	level = Random.Range(0, 4);
-		//	Debug.Log(level);
-		//	// try{
-		//	// 	SPHandler.setServo(level);
-		//	// }
-		//	// catch(System.Exception e){
-		//	// 	Debug.Log(e);
-		//	// }
-		//
-		//	// put ball at start point
-		//	this.gameObject.SetActive(true);
-		//	myTransform.position = baseballPlayerBallTransform.position;
-		//
-		//	// set target point
-		//	float targetX = Random.Range(35f - range, 35f + range);
-		//	float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
-		//	if (targetY < 1.6f)
-		//	{
-		//		targetY = 1.6f;
-		//	}
-		//	float targetZ = handTransform.position.z - 0.46f;
-		//
-		//	Debug.Log(targetPos);
-		//	targetPos = new Vector3(targetX, targetY, targetZ);
-		//	moveVector = targetPos - myTransform.position;
-		//
-		//	throwBall = false;
-		//	isFlying = true;
-		//}
+		if (throwBall && !hand_Motion.isCatching)
+		{
+			level = Random.Range(0, 4);
+			Debug.Log(level);
+			try{
+				SPHandler.setServo(level);
+			}
+			catch(System.Exception e){
+				Debug.Log(e);
+			}
+		
+			// put ball at start point
+			this.gameObject.SetActive(true);
+			myTransform.position = baseballPlayerBallTransform.position;
+		
+			// set target point
+			float targetX = Random.Range(35f - range, 35f + range);
+			float targetY = Random.Range(2.5f - range, 2.5f + range) + 0.95f;
+			if (targetY < 1.6f)
+			{
+				targetY = 1.6f;
+			}
+			float targetZ = handTransform.position.z - 0.46f;
+		
+			Debug.Log(targetPos);
+			targetPos = new Vector3(targetX, targetY, targetZ);
+			moveVector = targetPos - myTransform.position;
+		
+			throwBall = false;
+			isFlying = true;
+		}
 		
 		if (isFlying && !throwBall)
 		{
@@ -119,11 +119,11 @@ public class BallController : MonoBehaviour
 		// catch ball (distance, z value, flex value)
 		if (Vector3.Distance(myTransform.position, new Vector3(handTransform.position.x, handTransform.position.y + 0.95f, handTransform.position.z)) < distance
 			&& myTransform.position.z < (handTransform.position.z - 0.46f)
-			// && hand_Motion.thumb_flex < 140 
-			// && hand_Motion.index_finger_flex < 120
-			// && hand_Motion.middle_finger_flex < 125
-			// && hand_Motion.ring_finger_flex < 125
-			// && hand_Motion.pinky_flex < 135
+			&& hand_Motion.thumb_flex < 140 
+			&& hand_Motion.index_finger_flex < 120
+			&& hand_Motion.middle_finger_flex < 125
+			&& hand_Motion.ring_finger_flex < 125
+			&& hand_Motion.pinky_flex < 135
 			// && hand_Motion.thumb_flex > 120
 			// && hand_Motion.index_finger_flex > 100
 			// && hand_Motion.middle_finger_flex > 105
@@ -141,12 +141,27 @@ public class BallController : MonoBehaviour
 			//hand_Motion.catch_ball = true;
 			hand_Motion.CatchBall();
 			// hand_Motion.add_score = true;
+
+			try{
+				SPHandler.setServo(0);
+			}
+			catch(System.Exception e){
+				Debug.Log(e);
+			}
+
 		}
 
 		// fail ball
 		if (myTransform.position.z > (handTransform.position.z + 2f) && isFlying)
 		{
 			isFlying = false;
+
+			try{
+				SPHandler.setServo(0);
+			}
+			catch(System.Exception e){
+				Debug.Log(e);
+			}
 
 			// hand_Motion.fail_ball = true;
 			// hand_Motion.play_anim = true;
@@ -181,12 +196,12 @@ public class BallController : MonoBehaviour
 	{
 		level = Random.Range(0, 4);
 		Debug.Log(level);
-		// try{
-		// 	SPHandler.setServo(level);
-		// }
-		// catch(System.Exception e){
-		// 	Debug.Log(e);
-		// }
+		try{
+			SPHandler.setServo(level);
+		}
+		catch(System.Exception e){
+			Debug.Log(e);
+		}
 
 		// put ball at start point
 		this.gameObject.SetActive(true);
