@@ -31,13 +31,13 @@ public class SerialPortHandler : MonoBehaviour
 
     public bool SendString(string string_data){
 
-        // if(sp.IsOpen){
-        //     sp.Write(string_data);
-        // }
-        // else{
-        //     // throw Exception;
-        //     return false;
-        // }
+        if(sp.IsOpen){
+            sp.Write(string_data);
+        }
+        else{
+            // throw Exception;
+            return false;
+        }
 
         if(sp2.IsOpen){
             sp2.Write(string_data);
